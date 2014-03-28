@@ -1,5 +1,11 @@
 {
     "api": {
         "token": "YOUR-TOKEN-HERE"
-    }
+    },
+    "regions": [
+        {
+            "id": "your-region-id",
+            "name": "your-region-name"
+        }
+    ]
 }

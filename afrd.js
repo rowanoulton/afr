@@ -13,8 +13,7 @@ var configExists = fs.existsSync('./config/config.json'),
     regions      = [],
     configRaw,
     config,
-    regionConfigRaw,
-    regionConfig;
+    setupRegion;
 
 
 // Confirm configuration exists
@@ -33,24 +32,29 @@ try {
     process.exit(1);
 }
 
-// Retrieve region configuration
-try {
-    regionConfigRaw = fs.readFileSync('./config/regions.json');
-    regionConfig    = JSON.parse(regionConfigRaw);
-} catch (err) {
-    console.log('Error loading region configuration: ./config/regions.json', err);
+if (!config.regions.length) {
+    console.log('There are no regions specified in the configuration.');
     process.exit(1);
 }
 
-_.each(regionConfig, function (currentRegionConfig) {
-    var thisApi          = new Trademe({ token: config.api.token }),
-        thisRegionConfig = _.extend({}, currentRegionConfig, { api: thisApi }),
-        thisRegion;
+/**
+ * Create, load and store a single region
+ *
+ * @method setupRegion
+ * @param  {Object} regionConfig
+ */
+setupRegion = function (regionConfig) {
+    var api           = new Trademe({ token: config.api.token }),
+        configuration = _.extend({}, regionConfig, { api: api }),
+        region;
 
-    thisRegion = new Region(thisRegionConfig);
-    thisRegion.fetch(function (data) {
-        console.log('Loaded ' + data.length + ' listings for ' + thisRegionConfig.name);
+    region = new Region(configuration);
+    region.fetch(function (data) {
+        console.log('Loaded ' + data.length + ' listings for ' + configuration.name);
     }.bind(this));
 
-    regions.push(thisRegion);
-});
+    regions.push(region);
+};
+
+// Create and fetch each region specified in configuration
+_.each(config.regions, setupRegion);
