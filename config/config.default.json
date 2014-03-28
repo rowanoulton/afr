@@ -1,0 +1,6 @@
+{
+    "api": {
+        /* Trademe API OAuth token */
+        "token": "YOUR-TOKEN-HERE"
+    }
+}
