@@ -37,6 +37,8 @@ if (!config.regions.length) {
     process.exit(1);
 }
 
+console.log('Configuration loaded for ' + config.regions.length + ' region' + (config.regions.length === 1 ? '' : 's'));
+
 /**
  * Create, load and store a single region
  *
