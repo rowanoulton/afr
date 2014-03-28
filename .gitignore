@@ -3,3 +3,6 @@ node_modules/
 
 # Sublime project
 Afr.sublime-workspace
+
+# Configuration
+config/config.json
