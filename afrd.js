@@ -3,7 +3,7 @@
  */
 var fs      = require('fs'),
     _       = require('underscore'),
-    Region  = require('./lib/region'),
+    Region  = require('./lib/trademe/region'),
     Trademe = require('./lib/trademe/trademe');
 
 /**
