@@ -51,8 +51,8 @@ setupRegion = function (regionConfig) {
         region;
 
     region = new Region(configuration);
-    region.fetch(function (data) {
-        console.log('Loaded ' + data.length + ' listings for ' + configuration.name);
+    region.fetch(function (collection) {
+        console.log('Loaded ' + collection.length + ' listings for ' + configuration.name);
     }.bind(this));
 
     regions.push(region);
