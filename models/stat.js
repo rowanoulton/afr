@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
  */
 statSchema = new Schema({
     _suburb: { type: Number, ref: 'Suburb' },
-
+    _region: { type: Number, ref: 'Region' },
     /* A number representing a type of data (eg. "price", "price_per_room") */
     key: Number,
 
