@@ -20,6 +20,18 @@ statSchema = new Schema({
 });
 
 /**
+ * Indexes
+ *
+ * There should be only a single entry for:
+ *     each type of statistic, for
+ *     each key of data, for
+ *     each suburb, for
+ *     each region, for
+ *     each day.
+ */
+statSchema.index({ _suburb: 1, _region: 1, date: 1,  type: 1, key: 1 }, { unique: true });
+
+/**
  * Export
  */
 module.exports = mongoose.model('Stat', statSchema);
