@@ -29,7 +29,7 @@ statSchema = new Schema({
  *     each region, for
  *     each day.
  */
-statSchema.index({ _suburb: 1, _region: 1, date: 1,  type: 1, key: 1 }, { unique: true });
+statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique: true });
 
 /**
  * Export
