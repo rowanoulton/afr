@@ -10,6 +10,7 @@ var mongoose = require('mongoose'),
  */
 suburbSchema = new Schema({
     _id: Number,
+    _region: { type: Number, ref: 'Region' },
     name: String,
     latitude: Number,
     longitude: Number,
