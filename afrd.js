@@ -4,7 +4,8 @@
 var fs      = require('fs'),
     _       = require('underscore'),
     Region  = require('./lib/trademe/region'),
-    Trademe = require('./lib/trademe/trademe');
+    Trademe = require('./lib/trademe/interface'),
+    Methods = require('./lib/trademe/methods');
 
 /**
  * Setup
@@ -14,7 +15,6 @@ var configExists = fs.existsSync('./config/config.json'),
     configRaw,
     config,
     setupRegion;
-
 
 // Confirm configuration exists
 if (!configExists) {
@@ -46,9 +46,15 @@ console.log('Configuration loaded for ' + config.regions.length + ' region' + (c
  * @param  {Object} regionConfig
  */
 setupRegion = function (regionConfig) {
-    var api           = new Trademe({ token: config.api.token }),
-        configuration = _.extend({}, regionConfig, { api: api }),
-        region;
+    var configuration = _.extend({}, regionConfig, { api: api }),
+        region,
+        api;
+
+    api = new Trademe({
+        token: config.api.token
+        method: Methods.region.url,
+        paginate: Methods.region.paginate
+    });
 
     region = new Region(configuration);
     region.fetch(function (collection) {
