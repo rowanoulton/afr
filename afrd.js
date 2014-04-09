@@ -61,7 +61,12 @@ setupRegion = function (regionConfig) {
 
     region = new Region(configuration);
     region.fetch(function (collection) {
-        console.log('Loaded ' + collection.length + ' listings for ' + configuration.name);
+        var suburbs = collection.getSortedBySuburb(),
+            keys    = ['price', 'price_per_room'];
+
+        _.each(suburbs, function (suburb){
+            var series = new Series(keys, suburb);
+        }.bind(this));
     }.bind(this));
 
     regions.push(region);
