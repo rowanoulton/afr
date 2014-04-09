@@ -56,6 +56,7 @@ setupRegion = function (regionConfig) {
         paginate: Methods.region.paginate
     });
 
+    // Extend an empty object to prevent regionConfig being overwritten
     configuration = _.extend({}, regionConfig, { api: api });
 
     region = new Region(configuration);
