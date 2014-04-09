@@ -46,7 +46,7 @@ console.log('Configuration loaded for ' + config.regions.length + ' region' + (c
  * @param  {Object} regionConfig
  */
 setupRegion = function (regionConfig) {
-    var configuration = _.extend({}, regionConfig, { api: api }),
+    var configuration,
         region,
         api;
 
@@ -55,6 +55,8 @@ setupRegion = function (regionConfig) {
         method: Methods.region.url,
         paginate: Methods.region.paginate
     });
+
+    configuration = _.extend({}, regionConfig, { api: api });
 
     region = new Region(configuration);
     region.fetch(function (collection) {
