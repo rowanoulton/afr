@@ -55,14 +55,15 @@ suburbSchema.statics.upsert = function (config) {
 };
 
 /**
- * Sync suburbs with the given API
+ * Sync all suburbs of a given region
  *
- * This will load all suburbs for the given region
+ * This will request suburb data from the API and, for the given region, loop
+ * through each and perform an upsert
  *
  * @method sync
  * @param  {Object} config
- *         @param {Integer}   config.region A region ID to sync suburbs for
  *         @param {Interface} config.api    An instance of the trademe API interface
+ *         @param {Integer}   config.region A region ID to sync suburbs for
  *         @param {Function}  config.callback
  */
 suburbSchema.statics.sync = function (config) {
