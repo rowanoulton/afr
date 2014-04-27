@@ -6,7 +6,8 @@ var fs            = require('fs'),
     _             = require('underscore'),
     Suburb        = require('./models/suburb'),
     Region        = require('./models/region'),
-    Trademe       = require('./lib/trademe/interface');
+    Trademe       = require('./lib/trademe/interface'),
+    Geocoder      = require('./lib/geocoder');
 
 /**
  * Setup
@@ -63,10 +64,19 @@ _.each(config.regions, function (regionConfig) {
                 api: api,
                 region: regionConfig.id,
                 callback: function () {
+                    var geocoder = new Geocoder({
+                        regionId: regionConfig.id,
+                        connectionUri: connectionUri
+                    });
+
                     // At this point, the region and all it's suburbs are
                     // present in the db, we can begin to load, process and store
                     // statistical data
                     console.log('Suburbs synced for ' + regionConfig.name);
+
+                    // Begin geocoding process to confirm that all suburbs have
+                    // coordinate values
+                    geocoder.start();
                 }.bind(this)
             });
         }.bind(this)
