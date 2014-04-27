@@ -11,7 +11,8 @@ var fs            = require('fs'),
 /**
  * Setup
  */
-var configExists = fs.existsSync('./config/config.json'),
+var connectionUri = 'mongodb://localhost/test',
+    configExists  = fs.existsSync('./config/config.json'),
     configRaw,
     config,
     api;
@@ -41,7 +42,7 @@ console.log('Configuration loaded for ' + config.regions.length + ' region' + (c
 
 // Connect to the Mongo database
 // @todo: Dev/Production settings
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(connectionUri);
 
 // Create the API interface instance
 api = new Trademe({
