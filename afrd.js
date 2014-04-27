@@ -6,18 +6,14 @@ var fs            = require('fs'),
     _             = require('underscore'),
     Suburb        = require('./models/suburb'),
     Region        = require('./models/region'),
-    Trademe       = require('./lib/trademe/interface'),
-    TrademeRegion = require('./lib/trademe/region');
+    Trademe       = require('./lib/trademe/interface');
 
 /**
  * Setup
  */
 var configExists = fs.existsSync('./config/config.json'),
-    regions      = [],
     configRaw,
     config,
-    syncRegion,
-    syncSuburbs,
     api;
 
 // Confirm configuration exists
