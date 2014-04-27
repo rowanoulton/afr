@@ -14,6 +14,7 @@
     "mongoose": ">=3.6",
     "request": ">=2.34.0",
     "underscore": ">=1.6",
-    "fast-stats": ">=0.0.2"
+    "fast-stats": ">=0.0.2",
+    "node-geocoder": ">=2.1.1"
   }
 }
