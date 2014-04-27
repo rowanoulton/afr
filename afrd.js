@@ -1,11 +1,13 @@
 /**
  * Dependencies
  */
-var fs      = require('fs'),
-    _       = require('underscore'),
-    Region  = require('./lib/trademe/region'),
-    Trademe = require('./lib/trademe/interface'),
-    Methods = require('./lib/trademe/methods');
+var fs            = require('fs'),
+    mongoose      = require('mongoose'),
+    _             = require('underscore'),
+    Suburb        = require('./models/suburb'),
+    Region        = require('./models/region'),
+    Trademe       = require('./lib/trademe/interface'),
+    TrademeRegion = require('./lib/trademe/region');
 
 /**
  * Setup
@@ -14,7 +16,9 @@ var configExists = fs.existsSync('./config/config.json'),
     regions      = [],
     configRaw,
     config,
-    setupRegion;
+    syncRegion,
+    syncSuburbs,
+    api;
 
 // Confirm configuration exists
 if (!configExists) {
@@ -39,38 +43,35 @@ if (!config.regions.length) {
 
 console.log('Configuration loaded for ' + config.regions.length + ' region' + (config.regions.length === 1 ? '' : 's'));
 
-/**
- * Create, load and store a single region
- *
- * @method setupRegion
- * @param  {Object} regionConfig
- */
-setupRegion = function (regionConfig) {
-    var configuration,
-        region,
-        api;
+// Connect to the Mongo database
+// @todo: Dev/Production settings
+mongoose.connect('mongodb://localhost/test');
 
-    api = new Trademe({
-        token: config.api.token
-        method: Methods.region.url,
-        paginate: Methods.region.paginate
-    });
-
-    // Extend an empty object to prevent regionConfig being overwritten
-    configuration = _.extend({}, regionConfig, { api: api });
-
-    region = new Region(configuration);
-    region.fetch(function (collection) {
-        var suburbs = collection.getSortedBySuburb(),
-            keys    = ['price', 'price_per_room'];
-
-        _.each(suburbs, function (suburb){
-            var series = new Series(keys, suburb);
-        }.bind(this));
-    }.bind(this));
-
-    regions.push(region);
-};
+// Create the API interface instance
+api = new Trademe({
+    token: config.api.token
+});
 
 // Create and fetch each region specified in configuration
-_.each(config.regions, setupRegion);
+_.each(config.regions, function (regionConfig) {
+    Region.upsert({
+        id: regionConfig.id,
+        name: regionConfig.name,
+        callback: function () {
+            // Once the region has been upserted, sync suburbs for that region
+            // by polling the API for locality information, then looping each
+            // suburb for our given region and performing an upsert on each.
+            console.log(regionConfig.name + ' loaded, syncing suburbs...');
+            Suburb.sync({
+                api: api,
+                region: regionConfig.id,
+                callback: function () {
+                    // At this point, the region and all it's suburbs are
+                    // present in the db, we can begin to load, process and store
+                    // statistical data
+                    console.log('Suburbs synced for ' + regionConfig.name);
+                }.bind(this)
+            });
+        }.bind(this)
+    });
+}.bind(this));
