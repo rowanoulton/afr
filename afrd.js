@@ -65,8 +65,7 @@ _.each(config.regions, function (regionConfig) {
                 region: regionConfig.id,
                 callback: function () {
                     var geocoder = new Geocoder({
-                        regionId: regionConfig.id,
-                        connectionUri: connectionUri
+                        regionId: regionConfig.id
                     });
 
                     // At this point, the region and all it's suburbs are
