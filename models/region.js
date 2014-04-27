@@ -19,6 +19,15 @@ regionSchema = new Schema({
 * Statics
 */
 
+/**
+ * Update (or insert) a region into the database
+ *
+ * @method upsert
+ * @param  {Object} config
+ *         @param {Number}   config.id         The region ID
+ *         @param {String}   config.name       The region name
+ *         @param {Function} [config.callback]
+ */
 regionSchema.statics.upsert = function (config) {
     var Region = this;
 
