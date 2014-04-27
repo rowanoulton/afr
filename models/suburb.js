@@ -13,6 +13,7 @@ suburbSchema = new Schema({
     _id: Number,
     _region: { type: Number, ref: 'Region' },
     name: String,
+    district: String,
     latitude: Number,
     longitude: Number,
     stats: [{ type: Schema.Types.ObjectId, ref: 'Stat'}]
@@ -35,17 +36,13 @@ suburbSchema = new Schema({
  * @method upsert
  * @param  {Object} config
  *         @param {Number}   config.id         The suburb ID
- *         @param {String}   config.name       The suburb name
- *         @param {Number}   config.region     The region ID the suburb belongs to
+ *         @param {Object}   config.updates    The updates you want to make to the model
  *         @param {Function} [config.callback]
  */
 suburbSchema.statics.upsert = function (config) {
     var Suburb = this;
 
-    Suburb.update({ _id: config.id }, {
-        name: config.name,
-        _region: config.region
-    }, { upsert: true }, function (err) {
+    Suburb.update({ _id: config.id }, config.updates, { upsert: true }, function (err) {
         if (err) throw err;
 
         if (typeof config.callback === 'function') {
@@ -89,8 +86,11 @@ suburbSchema.statics.sync = function (config) {
                         // Upsert the Suburb
                         Suburb.upsert({
                             id: thisSuburb.SuburbId,
-                            name: thisSuburb.Name,
-                            region: regionId,
+                            updates: {
+                                name: thisSuburb.Name,
+                                district: thisDistrict.Name,
+                                _region: regionId
+                            },
                             callback: function () {
                                 count++;
 
