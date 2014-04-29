@@ -59,9 +59,9 @@ suburbSchema.statics.upsert = function (config) {
  *
  * @method sync
  * @param  {Object} config
- *         @param {Interface} config.api    An instance of the trademe API interface
- *         @param {Integer}   config.region A region ID to sync suburbs for
- *         @param {Function}  config.callback
+ *         @param {Interface} config.api      An instance of the trademe API interface
+ *         @param {Integer}   config.region   A region ID to sync suburbs for
+ *         @param {Function}  config.callback Callback is passed the ID of the synced suburb
  */
 suburbSchema.statics.sync = function (config) {
     var api          = config.api,
@@ -95,7 +95,7 @@ suburbSchema.statics.sync = function (config) {
                                 count++;
 
                                 if (count === totalSuburbs) {
-                                    callback();
+                                    callback(regionId);
                                 }
                             }.bind(this)
                         });
