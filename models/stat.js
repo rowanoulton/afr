@@ -46,17 +46,17 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
  * Create database records for statistics for a given series, suburb and region
  *
  * @method fromSeries
- * @param {Object} params
- *         @param {Integer} params.region
- *         @param {Integer} [params.suburb]
+ * @param {Object} config
+ *         @param {Integer} config.region
+ *         @param {Integer} [config.suburb]
  *         @param {Series}  series
  *         @param {String}  key
  */
-statSchema.statics.fromSeries = function (params) {
-    var regionId  = params.region,
-        suburbId  = params.suburb || null,
-        series    = params.series,
-        key       = params.key,
+statSchema.statics.fromSeries = function (config) {
+    var regionId  = config.region,
+        suburbId  = config.suburb || null,
+        series    = config.series,
+        key       = config.key,
         today     = new Date(),
         todayDb   = new Date(
             today.getUTCFullYear(),
