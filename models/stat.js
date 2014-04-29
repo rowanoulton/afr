@@ -47,30 +47,34 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
  *
  * @method fromSeries
  * @param {Object} config
- *         @param {Integer} config.region
- *         @param {Integer} [config.suburb]
- *         @param {Series}  series
- *         @param {Array}   keys
+ *         @param {Integer}  config.region
+ *         @param {Integer}  [config.suburb]
+ *         @param {Series}   config.series
+ *         @param {Array}    config.keys
+ *         @param {Function} [config.callback]
  */
 statSchema.statics.fromSeries = function (config) {
-    var regionId  = config.region,
-        suburbId  = config.suburb || null,
-        series    = config.series,
-        keys      = config.keys,
-        today     = new Date(),
-        todayDb   = new Date(
+    var regionId     = config.region,
+        suburbId     = config.suburb || null,
+        series       = config.series,
+        keys         = config.keys,
+        callback     = config.callback,
+        today        = new Date(),
+        todayDb      = new Date(
             today.getUTCFullYear(),
             today.getUTCMonth(),
             (today.getUTCDay() - 1)),
-        Statistic = this;
+        Statistic    = this,
+        numOfStats   = (keys.length * types.length),
+        numProcessed = 0;
 
-    _.each(keys, function (key) {
-        _.each(types, function (type) {
+    _.each(keys, function (key, keyIndex) {
+        _.each(types, function (type, typeIndex) {
             var stat = new Statistic({
                 _suburb: suburbId,
                 _region: regionId,
-                key: key,
-                type: type,
+                key: keyIndex,
+                type: typeIndex,
                 value: series.get(key, type),
                 date: todayDb
             });
@@ -78,9 +82,18 @@ statSchema.statics.fromSeries = function (config) {
             stat.save(function (err) {
                 if (err) {
                     // @todo: How should this be handled?
-                    console.log('An error was encountered saving ' + key +  '.' + type + ' for ' + (suburbId || 'overall') + ' ' + regionId + ' on ' + todayDb.toString(), err);
+                    // @todo: Write err to console.log
+                    console.log('An error was encountered saving ' + key +  '.' + type + ' for ' + (suburbId || 'overall') + ' ' + regionId + ' on ' + todayDb.toString());
+                } else {
+                    console.log(key +  '.' + type + ' for ' + (suburbId || 'overall') + ' [region:' + (regionId || 'overall')  + '] on ' + todayDb.toString());
                 }
-            });
+
+                numProcessed++;
+                if (numProcessed === numOfStats && typeof callback === 'function') {
+                    // If we have processed all our statistics, trigger the callback
+                    callback();
+                }
+            }.bind(this));
         }.bind(this));
     }.bind(this));
 };
@@ -88,4 +101,4 @@ statSchema.statics.fromSeries = function (config) {
 /**
  * Export
  */
-module.exports = mongoose.model('Stat', statSchema);
+module.exports = mongoose.model('Statistic', statSchema);
