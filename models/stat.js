@@ -50,13 +50,13 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
  *         @param {Integer} config.region
  *         @param {Integer} [config.suburb]
  *         @param {Series}  series
- *         @param {String}  key
+ *         @param {Array}   keys
  */
 statSchema.statics.fromSeries = function (config) {
     var regionId  = config.region,
         suburbId  = config.suburb || null,
         series    = config.series,
-        key       = config.key,
+        keys      = config.keys,
         today     = new Date(),
         todayDb   = new Date(
             today.getUTCFullYear(),
@@ -64,22 +64,24 @@ statSchema.statics.fromSeries = function (config) {
             (today.getUTCDay() - 1)),
         Statistic = this;
 
-    _.each(types, function (type) {
-        var stat = new Statistic({
-            _suburb: suburbId,
-            _region: regionId,
-            key: key,
-            type: type,
-            value: series.get(key, type),
-            date: todayDb
-        });
+    _.each(keys, function (key) {
+        _.each(types, function (type) {
+            var stat = new Statistic({
+                _suburb: suburbId,
+                _region: regionId,
+                key: key,
+                type: type,
+                value: series.get(key, type),
+                date: todayDb
+            });
 
-        stat.save(function (err) {
-            if (err) {
-                // @todo: How should this be handled?
-                console.log('An error was encountered saving ' + key +  '.' + type + ' for ' + (suburbId || 'overall') + ' ' + regionId + ' on ' + todayDb.toString(), err);
-            }
-        });
+            stat.save(function (err) {
+                if (err) {
+                    // @todo: How should this be handled?
+                    console.log('An error was encountered saving ' + key +  '.' + type + ' for ' + (suburbId || 'overall') + ' ' + regionId + ' on ' + todayDb.toString(), err);
+                }
+            });
+        }.bind(this));
     }.bind(this));
 };
 
