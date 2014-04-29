@@ -26,7 +26,7 @@ regionSchema = new Schema({
  * @param  {Object} config
  *         @param {Number}   config.id         The region ID
  *         @param {String}   config.name       The region name
- *         @param {Function} [config.callback]
+ *         @param {Function} [config.callback] Callback is passed the ID of the upserted region
  */
 regionSchema.statics.upsert = function (config) {
     var Region = this;
@@ -35,7 +35,7 @@ regionSchema.statics.upsert = function (config) {
         if (err) throw err;
 
         if (typeof config.callback === 'function') {
-            config.callback();
+            config.callback(config.id);
         }
     }.bind(this));
 };
