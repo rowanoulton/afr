@@ -37,7 +37,7 @@ suburbSchema = new Schema({
  * @param  {Object} config
  *         @param {Number}   config.id         The suburb ID
  *         @param {Object}   config.updates    The updates you want to make to the model
- *         @param {Function} [config.callback]
+ *         @param {Function} [config.callback] Callback is passed the ID of the upserted suburb
  */
 suburbSchema.statics.upsert = function (config) {
     var Suburb = this;
@@ -46,7 +46,7 @@ suburbSchema.statics.upsert = function (config) {
         if (err) throw err;
 
         if (typeof config.callback === 'function') {
-            config.callback();
+            config.callback(config.id);
         }
     }.bind(this));
 };
