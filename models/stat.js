@@ -9,8 +9,27 @@ var _        = require('underscore'),
 /**
  * Variables
  */
-var types = ['mean', 'median'],
-    errorHandler;
+var globalKeys  = ['price', 'price_per_room'],
+    globalTypes = ['mean', 'median'],
+    errorHandler,
+    globalTypeMap,
+    globalTypeNameMap,
+    globalKeyMap,
+    globalKeyNameMap;
+
+// We use number aliases to represent keys and types in our database to save on storage size. These variables contain
+// the maps from key/type names to their respective number aliases.
+globalKeyMap = {
+    price: 0,
+    price_per_room: 1,
+    // Volume is a special type, and is not a member of globalKeys as it has to be handled specially
+    volume: 2
+};
+
+globalTypeMap = {
+    mean: 0,
+    median: 1
+};
 
 /**
  * Setup
@@ -18,9 +37,9 @@ var types = ['mean', 'median'],
 statSchema = new Schema({
     _suburb: { type: Number, ref: 'Suburb' },
     _region: { type: Number, ref: 'Region' },
-    /* A number representing a type of data (eg. "price", "price_per_room") */
+    /* A number representing a type of data (eg. "price", "price_per_room", "volume") */
     key: Number,
-    /* A number representing a type of statistic (eg. mean, median, volume) */
+    /* A number representing a type of statistic (eg. mean, median) */
     type: Number,
     value: Number,
     date: { type: Date, default: Date.now }
@@ -41,6 +60,90 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
 /**
  * Statics
  */
+
+/**
+ * Get an array of key names for the types of data we calculate statistics for (e.g. "price", "price_per_room")
+ *
+ * @method getKeys
+ * @return {Array}
+ */
+statSchema.statics.getKeys = function () {
+    return globalKeys;
+};
+
+/**
+ * Get the name of a key from a given key number. Key numbers are aliases used in the database. See top of file.
+ *
+ * Method will lazy-load a reverse map of key numbers to names on the first pass
+ *
+ * @method getKeyName
+ * @param  {Number} keyNumber
+ * @return {String}
+ */
+statSchema.statics.getKeyName = function (keyNumber) {
+    if (!globalKeyNameMap) {
+        globalKeyNameMap = {};
+
+        _.each(this.getKeys(), function (key, name) {
+            globalKeyNameMap[key] = name;
+        });
+    }
+
+    return globalKeyNameMap[keyNumber];
+};
+
+/**
+ * Get the key number alias for a given key. Key numbers are aliases used in the database. See top of file.
+ *
+ * @method getKeyNumber
+ * @param  {String} keyName
+ * @return {Number}
+ */
+statSchema.statics.getKeyNumber = function (keyName) {
+    return globalKeyMap[keyName];
+};
+
+/**
+ * Get an array of names for the types of stats we calculate (e.g. "mean", "median")
+ *
+ * @method getTypes
+ * @return {Array}
+ */
+statSchema.statics.getTypes = function () {
+    return globalTypes;
+};
+
+/**
+ * Get the name of a type from a given type number. Type numbers are aliases used in the database. See top of file.
+ *
+ * Method will lazy-load a reverse map of type numbers to names on the first pass
+ *
+ * @method getTypeName
+ * @param  {Number} typeNumber
+ * @return {String}
+ */
+statSchema.statics.getTypeName = function (typeNumber) {
+    if (!globalTypeNameMap) {
+        globalTypeNameMap = {};
+
+        _.each(this.getTypes(), function (type, name) {
+            globalTypeNameMap[type] = name;
+        });
+    }
+
+    return globalTypeNameMap[typeNumber];
+};
+
+/**
+ * Get the type number alias for a given type. Type numbers are aliases used in the database. See top of file.
+ *
+ * @method getTypeNumber
+ * @param  {String} typeName
+ * @return {Number}
+ */
+statSchema.statics.getTypeNumber = function (typeName) {
+    return globalTypeMap[typeName];
+};
 
 /**
  * Create database records for statistics for a given series, suburb and region
