@@ -19,6 +19,10 @@ var connectionUri = 'mongodb://localhost/test',
     configExists  = fs.existsSync('./config/config.json'),
     configRaw,
     config,
+    syncRegion,
+    syncSuburbs,
+    syncGeocodes,
+    syncStats,
     api;
 
 // Confirm configuration exists
@@ -52,11 +56,6 @@ mongoose.connect(connectionUri);
 api = new Trademe({
     token: config.api.token
 });
-
-var syncRegion,
-    syncSuburbs,
-    syncGeocodes,
-    syncStats;
 
 syncRegion = function (regionConfig) {
     Region.upsert({
