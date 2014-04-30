@@ -97,7 +97,7 @@ syncGeocodes = function (regionId) {
 };
 
 syncStats = function (regionId) {
-    var keys           = ['price', 'price_per_room'],
+    var keys           = Statistics.getKeys(),
         statsProcessed = 0,
         statsToProcess = 0,
         regionConfig,
@@ -129,7 +129,6 @@ syncStats = function (regionId) {
                 region: regionId,
                 suburb: suburbId,
                 series: series,
-                keys: keys,
                 callback: function () {
                     statsProcessed++;
 
