@@ -3,6 +3,7 @@
  */
 var _        = require('underscore'),
     mongoose = require('mongoose'),
+    winston  = require('winston'),
     Schema   = mongoose.Schema,
     statSchema;
 
