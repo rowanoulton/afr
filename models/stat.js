@@ -153,50 +153,73 @@ statSchema.statics.getTypeNumber = function (typeName) {
  *         @param {Integer}  config.region
  *         @param {Integer}  [config.suburb]
  *         @param {Series}   config.series
- *         @param {Array}    config.keys
  *         @param {Function} [config.callback]
  */
 statSchema.statics.fromSeries = function (config) {
     var regionId     = config.region,
         suburbId     = config.suburb || null,
         series       = config.series,
-        keys         = config.keys,
         callback     = config.callback,
+        keys         = this.getKeys(),
+        types        = this.getTypes(),
         today        = new Date(),
         todayDb      = new Date(
             today.getUTCFullYear(),
             today.getUTCMonth(),
             (today.getUTCDay() - 1)),
         Statistic    = this,
-        numOfStats   = (keys.length * types.length),
-        numProcessed = 0;
+        numOfStats   = (keys.length * types.length) + 1,
+        numProcessed = 0,
+        handleSaveCallback,
+        volumeStat;
 
-    _.each(keys, function (key, keyIndex) {
-        _.each(types, function (type, typeIndex) {
-            var stat = new Statistic({
+    /*
+     * Callback for persisting statistics to database. Handles error logging and invocation of callback on completion
+     *
+     * @private
+     * @method handleSaveCallback
+     * @param  {Error} err
+     * @param  {Statistic} stat
+     */
+    handleSaveCallback = function (err, stat) {
+        if (err) {
+            // @todo: How should this be handled?
+            console.log('Encountered an error while saving a statistic', err);
+        } else {
+            console.log('Statistic saved', stat);
+        }
+
+        numProcessed++;
+        if (numProcessed === numOfStats && typeof callback === 'function') {
+            // If we have processed all our statistics, trigger the callback
+            callback();
+        }
+    };
+
+    // Create a record for the volume of listings — this is a special case, and must be added seperately to the other
+    // types of statistics which are handled more generically below
+    Statistic.create({
+        _suburb: suburbId,
+        _region: regionId,
+        key: this.getKeyNumber('volume'),
+        // This stat isn't actually a mean, but we must set it to ensure uniqueness (prevent duplicate entries of this
+        // statistic for the same day)
+        type: this.getTypeNumber('mean'),
+        value: series.length,
+        date: todayDb
+    }, handleSaveCallback.bind(this));
+
+    // Iterate over keys and types and store statistics for each. This includes everything except volume
+    _.each(keys, function (keyName) {
+        _.each(types, function (typeName) {
+            Statistic.create({
                 _suburb: suburbId,
                 _region: regionId,
-                key: keyIndex,
-                type: typeIndex,
-                value: series.get(key, type),
+                key: this.getKeyNumber(keyName),
+                type: this.getTypeNumber(typeName),
+                value: series.get(keyName, typeName),
                 date: todayDb
-            });
-
-            stat.save(function (err) {
-                if (err) {
-                    // @todo: How should this be handled?
-                    // @todo: Write err to console.log
-                    console.log('An error was encountered saving ' + key +  '.' + type + ' for ' + (suburbId || 'overall') + ' ' + regionId + ' on ' + todayDb.toString());
-                } else {
-                    console.log(key +  '.' + type + ' for ' + (suburbId || 'overall') + ' [region:' + (regionId || 'overall')  + '] on ' + todayDb.toString());
-                }
-
-                numProcessed++;
-                if (numProcessed === numOfStats && typeof callback === 'function') {
-                    // If we have processed all our statistics, trigger the callback
-                    callback();
-                }
-            }.bind(this));
+            }, handleSaveCallback.bind(this));
         }.bind(this));
     }.bind(this));
 };
