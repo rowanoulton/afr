@@ -170,8 +170,7 @@ statSchema.statics.fromSeries = function (config) {
         Statistic    = this,
         numOfStats   = (keys.length * types.length) + 1,
         numProcessed = 0,
-        handleSaveCallback,
-        volumeStat;
+        handleSaveCallback;
 
     /*
      * Callback for persisting statistics to database. Handles error logging and invocation of callback on completion
