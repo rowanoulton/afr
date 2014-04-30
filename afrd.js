@@ -57,6 +57,12 @@ api = new Trademe({
     token: config.api.token
 });
 
+/**
+ * Perform an upsert on a single region
+ *
+ * @method syncRegion
+ * @param  {Object} regionConfig
+ */
 syncRegion = function (regionConfig) {
     Region.upsert({
         id: regionConfig.id,
@@ -65,6 +71,12 @@ syncRegion = function (regionConfig) {
     });
 };
 
+/**
+ * Perform a sync on all suburbs of a single region
+ *
+ * @method syncSuburbs
+ * @param  {Number} regionId
+ */
 syncSuburbs = function (regionId) {
     // Once the region has been upserted, sync suburbs for that region
     // by polling the API for locality information, then looping each
@@ -85,6 +97,12 @@ syncSuburbs = function (regionId) {
     });
 };
 
+/**
+ * Begin a geocoding process for all suburbs of a given region
+ *
+ * @method syncGeocodes
+ * @param  {Number} regionId
+ */
 syncGeocodes = function (regionId) {
     var geocoder = new Geocoder({
         regionId: regionId
@@ -95,6 +113,12 @@ syncGeocodes = function (regionId) {
     geocoder.start();
 };
 
+/**
+ * Load all listings for a given region and process them into statistics which are then stored in the database
+ *
+ * @method syncStats
+ * @param  {Number} regionId
+ */
 syncStats = function (regionId) {
     var keys           = Statistics.getKeys(),
         statsProcessed = 0,
