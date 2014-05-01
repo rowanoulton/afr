@@ -3,7 +3,7 @@
  */
 var _        = require('underscore'),
     mongoose = require('mongoose'),
-    winston  = require('winston'),
+    Logger   = require('../lib/logger'),
     Schema   = mongoose.Schema,
     statSchema;
 
@@ -171,7 +171,11 @@ statSchema.statics.fromSeries = function (config) {
         Statistic    = this,
         numOfStats   = (keys.length * types.length) + 1,
         numProcessed = 0,
-        handleSaveCallback;
+        handleSaveCallback,
+        logger;
+
+    // Log debug information about statistic processing to file to prevent pollution of console
+    logger = new Logger('stats');
 
     /*
      * Callback for persisting statistics to database. Handles error logging and invocation of callback on completion
@@ -184,9 +188,9 @@ statSchema.statics.fromSeries = function (config) {
     handleSaveCallback = function (err, stat) {
         if (err) {
             // @todo: How should this be handled?
-            console.log('Encountered an error while saving a statistic', err);
+            logger.info('Encountered an error while saving a statistic', err);
         } else {
-            console.log('Statistic saved', stat);
+            logger.info('Statistic saved', stat);
         }
 
         numProcessed++;

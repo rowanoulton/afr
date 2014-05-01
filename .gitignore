@@ -6,3 +6,6 @@ Afr.sublime-workspace
 
 # Configuration
 config/config.json
+
+# Logs
+logs/*
