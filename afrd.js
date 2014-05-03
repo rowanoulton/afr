@@ -16,46 +16,52 @@ var fs            = require('fs'),
  * Setup
  */
 var connectionUri = 'mongodb://localhost/test',
-    configExists  = fs.existsSync('./config/config.json'),
-    configRaw,
-    config,
+    getConfiguration,
     syncRegion,
     syncSuburbs,
     syncGeocodes,
     syncStats,
+    config,
     api;
 
-// Confirm configuration exists
-if (!configExists) {
-    // Explain that users will need to configure their own details as part of project setup
-    console.log('No configuration found. Please copy and rename ./config/config.default.json and enter your details.');
-    process.exit(1);
-}
+/**
+ * Load configuration from JSON
+ *
+ * @method getConfiguration
+ * @return {Object|Undefined} configObj
+ *         If configuration was loaded and valid, it is returned as an object. Otherwise it
+ *         is returned as undefined
+ */
+getConfiguration = function () {
+    var configExists  = fs.existsSync('./config/config.json'),
+        configRaw,
+        configObj;
 
-// Retrieve configuration
-try {
-    configRaw = fs.readFileSync('./config/config.json');
-    config    = JSON.parse(configRaw);
-} catch (err) {
-    console.log('Error loading configuration: ./config/config.json', err);
-    process.exit(1);
-}
+    // Confirm configuration exists
+    if (!configExists) {
+        // Explain that users will need to configure their own details as part of project setup
+        console.log('No configuration found. Please copy and rename ./config/config.default.json and enter your details.');
+        return;
+    }
 
-if (!config.regions.length) {
-    console.log('There are no regions specified in the configuration.');
-    process.exit(1);
-}
+    // Retrieve configuration
+    try {
+        configRaw = fs.readFileSync('./config/config.json');
+        configObj = JSON.parse(configRaw);
+    } catch (err) {
+        console.log('Error loading configuration: ./config/config.json', err);
+        return;
+    }
 
-console.log('Configuration loaded for ' + config.regions.length + ' region' + (config.regions.length === 1 ? '' : 's'));
+    if (!configObj.regions.length) {
+        console.log('There are no regions specified in the configuration.');
+        return;
+    }
 
-// Connect to the Mongo database
-// @todo: Dev/Production settings
-mongoose.connect(connectionUri);
+    console.log('Configuration loaded for ' + configObj.regions.length + ' region' + (configObj.regions.length === 1 ? '' : 's'));
 
-// Create the API interface instance
-api = new Trademe({
-    token: config.api.token
-});
+    return configObj;
+};
 
 /**
  * Perform an upsert on a single region
@@ -165,5 +171,21 @@ syncStats = function (regionId) {
     }.bind(this));
 };
 
-// Create and fetch each region specified in configuration
-_.each(config.regions, syncRegion.bind(this));
+config = getConfiguration();
+
+if (!_.isUndefined(config)) {
+    if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
+        // Connect to the database
+        // @todo: Dev/Production settings
+        mongoose.connect(connectionUri);
+    }
+
+    // Create the API interface instance
+    // Note: This must be recreated each time incase the token changes
+    api = new Trademe({
+        token: config.api.token
+    });
+
+    // Create and fetch each region specified in configuration
+    _.each(config.regions, syncRegion.bind(this));
+}
