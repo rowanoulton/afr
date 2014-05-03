@@ -16,6 +16,7 @@
     "underscore": ">=1.6",
     "fast-stats": ">=0.0.2",
     "node-geocoder": ">=2.1.1",
-    "winston": ">=0.7.3"
+    "winston": ">=0.7.3",
+    "node-schedule": ">=0.1.13"
   }
 }
