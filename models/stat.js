@@ -3,7 +3,6 @@
  */
 var _        = require('underscore'),
     mongoose = require('mongoose'),
-    Logger   = require('../lib/logger'),
     Schema   = mongoose.Schema,
     statSchema;
 
@@ -161,6 +160,7 @@ statSchema.statics.fromSeries = function (config) {
         suburbId     = config.suburb || null,
         series       = config.series,
         callback     = config.callback,
+        logger       = config.logger,
         keys         = this.getKeys(),
         types        = this.getTypes(),
         today        = new Date(),
@@ -171,11 +171,7 @@ statSchema.statics.fromSeries = function (config) {
         Statistic    = this,
         numOfStats   = (keys.length * types.length) + 1,
         numProcessed = 0,
-        handleSaveCallback,
-        logger;
-
-    // Log debug information about statistic processing to file to prevent pollution of console
-    logger = new Logger('stats');
+        handleSaveCallback;
 
     /*
      * Callback for persisting statistics to database. Handles error logging and invocation of callback on completion
