@@ -4,6 +4,7 @@
 var fs            = require('fs'),
     mongoose      = require('mongoose'),
     _             = require('underscore'),
+    schedule      = require('node-schedule'),
     Suburb        = require('./models/suburb'),
     Region        = require('./models/region'),
     Statistics    = require('./models/stat'),
@@ -18,11 +19,13 @@ var fs            = require('fs'),
  */
 var connectionUri = 'mongodb://localhost/test',
     getConfiguration,
+    recurrenceRule,
     syncRegion,
     syncSuburbs,
     syncGeocodes,
     syncStats,
     config,
+    job,
     api;
 
 /**
@@ -174,6 +177,14 @@ syncStats = function (regionId) {
         }.bind(this));
     }.bind(this));
 };
+
+/**
+ * Startup
+ */
+recurrenceRule        = new schedule.RecurrenceRule();
+recurrenceRule.hour   = 0;
+recurrenceRule.minute = 0;
+
 
 config = getConfiguration();
 
