@@ -108,7 +108,7 @@ syncSuburbs = function (regionId) {
             // present in the db, we can begin to load, process and store
             // statistical data
             console.log('Suburbs synced for ' + regionConfig.name);
-            syncGeocodes(regionId);
+            syncGeocodes(regionId, regionConfig.name);
             syncStats(regionId);
         }.bind(this)
     });
@@ -119,10 +119,12 @@ syncSuburbs = function (regionId) {
  *
  * @method syncGeocodes
  * @param  {Number} regionId
+ * @param  {String} regionName
  */
-syncGeocodes = function (regionId) {
+syncGeocodes = function (regionId, regionName) {
     var geocoder = new Geocoder({
-        regionId: regionId
+        regionId: regionId,
+        regionName: regionName
     });
 
     // Begin geocoding process to confirm that all suburbs have
