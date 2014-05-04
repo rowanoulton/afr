@@ -186,7 +186,7 @@ statSchema.statics.fromSeries = function (config) {
             // @todo: How should this be handled?
             logger.info('Encountered an error while saving a statistic', err);
         } else {
-            logger.info('Statistic saved', stat._suburb, stat._region, this.getKeyName(stat.key), this.getTypeName(stat.type), stat.value);
+            logger.info('Statistic saved', stat._region, stat._suburb, this.getKeyName(stat.key), this.getTypeName(stat.type), stat.value);
         }
 
         numProcessed++;
