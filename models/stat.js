@@ -84,7 +84,7 @@ statSchema.statics.getKeyName = function (keyNumber) {
     if (!globalKeyNameMap) {
         globalKeyNameMap = {};
 
-        _.each(this.getKeys(), function (name, key) {
+        _.each(globalKeyMap, function (key, name) {
             globalKeyNameMap[key] = name;
         });
     }
