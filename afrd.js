@@ -24,6 +24,7 @@ var connectionUri = 'mongodb://localhost/test',
     syncSuburbs,
     syncGeocodes,
     syncStats,
+    syncJob,
     config,
     job,
     api;
@@ -179,28 +180,46 @@ syncStats = function (regionId) {
 };
 
 /**
+ * Job to perform all necessary work (syncing of regions, suburbs, statistics)
+ *
+ * Job should be run at the beginning of each day
+ *
+ * @method syncJob
+ */
+syncJob = function () {
+    console.log('Running job', new Date());
+    config = getConfiguration();
+
+    if (!_.isUndefined(config)) {
+        if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
+            // Connect to the database
+            // @todo: Dev/Production settings
+            mongoose.connect(connectionUri);
+        }
+
+        // Create the API interface instance
+        // Note: This must be recreated each time incase the token changes
+        api = new Trademe({
+            token: config.api.token
+        });
+
+        // Create and fetch each region specified in configuration
+        _.each(config.regions, syncRegion.bind(this));
+    }
+};
+
+/**
  * Startup
  */
+
+// Create a rule that runs the job at the very start of every day (@ 00:00:00)
 recurrenceRule        = new schedule.RecurrenceRule();
 recurrenceRule.hour   = 0;
 recurrenceRule.minute = 0;
 
+// Schedule the job
+job = schedule.scheduleJob(recurrenceRule, syncJob.bind(this));
 
-config = getConfiguration();
-
-if (!_.isUndefined(config)) {
-    if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
-        // Connect to the database
-        // @todo: Dev/Production settings
-        mongoose.connect(connectionUri);
-    }
-
-    // Create the API interface instance
-    // Note: This must be recreated each time incase the token changes
-    api = new Trademe({
-        token: config.api.token
-    });
-
-    // Create and fetch each region specified in configuration
-    _.each(config.regions, syncRegion.bind(this));
-}
+// Run the job immediately as well
+// @todo: Will this create a race condition if run near to 00:00:00?
+syncJob();
