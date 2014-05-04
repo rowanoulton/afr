@@ -17,8 +17,7 @@ var fs            = require('fs'),
 /**
  * Setup
  */
-var connectionUri = 'mongodb://localhost/test',
-    getConfiguration,
+var getConfiguration,
     recurrenceRule,
     syncRegion,
     syncSuburbs,
@@ -58,6 +57,13 @@ getConfiguration = function () {
         return;
     }
 
+    // Confirm database connection specified
+    if (_.isUndefined(configObj.database) || _.isUndefined(configObj.database.connectionUri)) {
+        console.log('No database.connectionUri specified in the configuration');
+        return;
+    }
+
+    // Confirm at least one region to sync
     if (!configObj.regions.length) {
         console.log('There are no regions specified in the configuration.');
         return;
@@ -194,7 +200,7 @@ syncJob = function () {
         if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
             // Connect to the database
             // @todo: Dev/Production settings
-            mongoose.connect(connectionUri);
+            mongoose.connect(config.database.connectionUri);
         }
 
         // Create the API interface instance
