@@ -44,7 +44,7 @@ getConfiguration = function () {
     // Confirm configuration exists
     if (!configExists) {
         // Explain that users will need to configure their own details as part of project setup
-        console.log('No configuration found. Please copy and rename ./config/config.default.json and enter your details.');
+        console.log('🔧  -> No configuration found. Please copy and rename ./config/config.default.json and enter your details.');
         return;
     }
 
@@ -53,23 +53,23 @@ getConfiguration = function () {
         configRaw = fs.readFileSync('./config/config.json');
         configObj = JSON.parse(configRaw);
     } catch (err) {
-        console.log('Error loading configuration: ./config/config.json', err);
+        console.log('🔧  -> Error loading configuration: ./config/config.json', err);
         return;
     }
 
     // Confirm database connection specified
     if (_.isUndefined(configObj.database) || _.isUndefined(configObj.database.connectionUri)) {
-        console.log('No database.connectionUri specified in the configuration');
+        console.log('🔧  -> No database.connectionUri specified in the configuration');
         return;
     }
 
     // Confirm at least one region to sync
     if (!configObj.regions.length) {
-        console.log('There are no regions specified in the configuration.');
+        console.log('🔧  -> There are no regions specified in the configuration.');
         return;
     }
 
-    console.log('Configuration loaded for ' + configObj.regions.length + ' region' + (configObj.regions.length === 1 ? '' : 's'));
+    console.log('🔧  -> Configuration loaded for ' + configObj.regions.length + ' region' + (configObj.regions.length === 1 ? '' : 's'));
 
     return configObj;
 };
@@ -107,7 +107,7 @@ syncSuburbs = function (regionId) {
             // At this point, the region and all it's suburbs are
             // present in the db, we can begin to load, process and store
             // statistical data
-            console.log('Suburbs synced for ' + regionConfig.name);
+            console.log('📚  -> Suburbs synced for ' + regionConfig.name);
             syncGeocodes(regionId, regionConfig.name);
             syncStats(regionId);
         }.bind(this)
