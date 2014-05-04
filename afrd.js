@@ -160,7 +160,7 @@ syncStats = function (regionId) {
             // Log debug information about statistic processing to file to prevent pollution of console
             logger  = new FileLogger('stats');
 
-        console.log(collection.length + ' listings loaded for ' + regionConfig.name);
+        console.log('📚  -> ' + collection.length + ' listings loaded for ' + regionConfig.name);
 
         _.each(suburbs, function (suburb, suburbId) {
             var series = new Series(keys, suburb);
@@ -179,7 +179,7 @@ syncStats = function (regionId) {
 
                     if (statsProcessed === statsToProcess) {
                         // We are finished, notify user
-                        console.log('Statistics saved for ' + regionConfig.name);
+                        console.log('📊  -> Statistics saved for ' + regionConfig.name);
                     }
                 }.bind(this)
             });
