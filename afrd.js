@@ -12,7 +12,7 @@ var fs            = require('fs'),
     Trademe       = require('./lib/trademe/interface'),
     TrademeRegion = require('./lib/trademe/region'),
     Geocoder      = require('./lib/geocoder'),
-    Logger        = require('./lib/logger');
+    FileLogger    = require('./lib/file-logger');
 
 /**
  * Setup
@@ -150,7 +150,7 @@ syncStats = function (regionId) {
     region.fetch(function (collection) {
         var suburbs = collection.getSortedBySuburb(),
             // Log debug information about statistic processing to file to prevent pollution of console
-            logger  = new Logger('stats');
+            logger  = new FileLogger('stats');
 
         console.log(collection.length + ' listings loaded for ' + regionConfig.name);
 
