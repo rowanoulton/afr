@@ -84,7 +84,7 @@ statSchema.statics.getKeyName = function (keyNumber) {
     if (!globalKeyNameMap) {
         globalKeyNameMap = {};
 
-        _.each(this.getKeys(), function (key, name) {
+        _.each(this.getKeys(), function (name, key) {
             globalKeyNameMap[key] = name;
         });
     }
@@ -126,7 +126,7 @@ statSchema.statics.getTypeName = function (typeNumber) {
     if (!globalTypeNameMap) {
         globalTypeNameMap = {};
 
-        _.each(this.getTypes(), function (type, name) {
+        _.each(this.getTypes(), function (name, type) {
             globalTypeNameMap[type] = name;
         });
     }
@@ -186,7 +186,7 @@ statSchema.statics.fromSeries = function (config) {
             // @todo: How should this be handled?
             logger.info('Encountered an error while saving a statistic', err);
         } else {
-            logger.info('Statistic saved', stat);
+            logger.info('Statistic saved', stat._suburb, stat._region, this.getKeyName(stat.key), this.getTypeName(stat.type), stat.value);
         }
 
         numProcessed++;
