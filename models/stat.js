@@ -146,6 +146,20 @@ statSchema.statics.getTypeNumber = function (typeName) {
 };
 
 /**
+ * Get a local-timezone date for today where hours, minutes and seconds are zero
+ *
+ * For example, on the 7th of May 2014, this function would return a date of 2014-05-07T00:00:00Z
+ *
+ * @method getDatabaseDate
+ * @return {Date}
+ */
+statSchema.statics.getDatabaseDate = function () {
+    var today = new Date();
+
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+};
+
+/**
  * Create database records for statistics for a given series, suburb and region
  *
  * @method fromSeries
@@ -156,19 +170,15 @@ statSchema.statics.getTypeNumber = function (typeName) {
  *         @param {Function} [config.callback]
  */
 statSchema.statics.fromSeries = function (config) {
-    var regionId     = config.region,
+    var Statistic    = this,
+        regionId     = config.region,
         suburbId     = config.suburb || null,
         series       = config.series,
         callback     = config.callback,
         logger       = config.logger,
         keys         = this.getKeys(),
         types        = this.getTypes(),
-        today        = new Date(),
-        todayDb      = new Date(
-            today.getUTCFullYear(),
-            today.getUTCMonth(),
-            (today.getUTCDay() - 1)),
-        Statistic    = this,
+        todayDb      = this.getDatabaseDate(),
         numOfStats   = (keys.length * types.length) + 1,
         numProcessed = 0,
         handleSaveCallback;
