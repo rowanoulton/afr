@@ -141,7 +141,8 @@ syncGeocodes = function (regionId, regionName) {
 syncStats = function (regionId) {
     var keys           = Statistics.getKeys(),
         statsProcessed = 0,
-        statsToProcess = 0,
+        // Starts at one to account for the overall series
+        statsToProcess = 1,
         regionConfig,
         region;
 
@@ -158,9 +159,26 @@ syncStats = function (regionId) {
     region.fetch(function (collection) {
         var suburbs = collection.getSortedBySuburb(),
             // Log debug information about statistic processing to file to prevent pollution of console
-            logger  = new FileLogger('stats');
+            logger  = new FileLogger('stats'),
+            handleSeriesCallback,
+            overallSeries;
 
         console.log(collection.length + ' listings loaded for ' + regionConfig.name);
+
+        /*
+         * Callback for the completion of storing statistical series. Checks whether process has completed for the
+         * current region
+         *
+         * @method handleSeriesCallback
+         */
+        handleSeriesCallback = function () {
+            statsProcessed++;
+
+            if (statsProcessed === statsToProcess) {
+                // We are finished, notify user
+                console.log('Statistics saved for ' + regionConfig.name);
+            }
+        };
 
         _.each(suburbs, function (suburb, suburbId) {
             var series = new Series(keys, suburb);
@@ -174,16 +192,20 @@ syncStats = function (regionId) {
                 suburb: suburbId,
                 series: series,
                 logger: logger,
-                callback: function () {
-                    statsProcessed++;
-
-                    if (statsProcessed === statsToProcess) {
-                        // We are finished, notify user
-                        console.log('Statistics saved for ' + regionConfig.name);
-                    }
-                }.bind(this)
+                callback: handleSeriesCallback.bind(this)
             });
         }.bind(this));
+
+        // Add an overall series for the region
+        overallSeries = new Series(keys, collection.getAll());
+
+        // Create and store statistical series for this overall series
+        Statistics.fromSeries({
+            region: regionId,
+            series: overallSeries,
+            logger: logger,
+            callback: handleSeriesCallback.bind(this)
+        });
     }.bind(this));
 };
 
