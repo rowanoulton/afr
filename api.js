@@ -13,6 +13,13 @@ var app = express(),
     config;
 
 /**
+ * Middleware setup
+ */
+app.use(express.methodOverride());
+app.use(express.bodyParser());
+app.use(app.router);
+
+/**
  * Load configuration from JSON
  *
  * @method getConfiguration
