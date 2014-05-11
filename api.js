@@ -2,6 +2,7 @@
  * Dependencies
  */
 var fs         = require('fs'),
+    _          = require('underscore'),
     express    = require('express'),
     mongoose   = require('mongoose'),
     Suburb     = require('./models/suburb'),
@@ -61,3 +62,14 @@ getConfiguration = function () {
 
     return configObj;
 };
+
+config = getConfiguration();
+
+if (!_.isUndefined(config)) {
+    if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
+        // Connect to the database
+        mongoose.connect(config.database.connectionUri);
+    }
+
+    // @todo Provide API endpoints
+}
