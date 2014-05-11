@@ -1,9 +1,12 @@
 /**
  * Dependencies
  */
-var fs       = require('fs'),
-    express  = require('express'),
-    mongoose = require('mongoose');
+var fs         = require('fs'),
+    express    = require('express'),
+    mongoose   = require('mongoose'),
+    Suburb     = require('./models/suburb'),
+    Region     = require('./models/region'),
+    Statistics = require('./models/stat');
 
 /**
  * Declarations
