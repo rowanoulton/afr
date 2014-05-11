@@ -64,7 +64,6 @@ getConfiguration = function () {
 };
 
 config = getConfiguration();
-
 if (!_.isUndefined(config)) {
     if (mongoose.connection.readyState !== mongoose.Connection.STATES.connected) {
         // Connect to the database
