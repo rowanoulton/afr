@@ -3,10 +3,13 @@
  */
 var fs       = require('fs'),
     express  = require('express'),
-    mongoose = require('mongoose'),
-    app      = express();
+    mongoose = require('mongoose');
 
-var getConfiguration,
+/**
+ * Declarations
+ */
+var app = express(),
+    getConfiguration,
     config;
 
 /**
