@@ -1,27 +1,29 @@
 /**
  * Dependencies
  */
-var fs         = require('fs'),
-    _          = require('underscore'),
-    express    = require('express'),
-    mongoose   = require('mongoose'),
-    Suburb     = require('./models/suburb'),
-    Region     = require('./models/region'),
-    Statistics = require('./models/stat');
+var fs             = require('fs'),
+    _              = require('underscore'),
+    express        = require('express'),
+    bodyParser     = require('body-parser'),
+    methodOverride = require('method-override'),
+    mongoose       = require('mongoose'),
+    Suburb         = require('./models/suburb'),
+    Region         = require('./models/region'),
+    Statistics     = require('./models/stat');
 
 /**
  * Declarations
  */
-var app = express(),
-    getConfiguration,
-    config;
+var getConfiguration,
+    config,
+    app;
 
 /**
  * Middleware setup
  */
-app.use(express.methodOverride());
-app.use(express.bodyParser());
-app.use(app.router);
+app = express();
+app.use(methodOverride());
+app.use(bodyParser());
 
 /**
  * Load configuration from JSON
