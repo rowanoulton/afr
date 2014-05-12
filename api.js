@@ -11,7 +11,7 @@ var fs             = require('fs'),
     // Routes
     routes = {
         regions: require(__dirname + '/routes/regions'),
-        suburbs: require(__dirname + '/routes/suburbs')
+        statistics: require(__dirname + '/routes/statistics')
     };
 
 /**
@@ -76,6 +76,6 @@ if (!_.isUndefined(config)) {
     }
 
     app.use('/regions', routes.regions);
-    app.use('/region/:id/suburbs', routes.suburbs);
+    app.use('/statistics', routes.statistics);
     app.listen(3000);
 }
