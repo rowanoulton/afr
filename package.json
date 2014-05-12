@@ -18,7 +18,7 @@
     "node-geocoder": ">=2.1.1",
     "winston": ">=0.7.3",
     "node-schedule": ">=0.1.13",
-    "express": "4.x",
+    "express": "4.2.0",
     "body-parser": "1.x",
     "method-override": "1.x"
   }
