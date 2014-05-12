@@ -81,6 +81,20 @@ statSchema.statics.getKeys = function () {
  * @return {String}
  */
 statSchema.statics.getKeyName = function (keyNumber) {
+    var keyNameMap = this.getKeyNameMap();
+
+    return keyNameMap[keyNumber];
+};
+
+/**
+ * Get a map of keys to names. Keys are a type of data
+ *
+ * Lazy loads an object map as needed
+ *
+ * @method getKeyNameMap
+ * @return {Object}
+ */
+statSchema.statics.getKeyNameMap = function () {
     if (!globalKeyNameMap) {
         globalKeyNameMap = {};
 
@@ -89,7 +103,7 @@ statSchema.statics.getKeyName = function (keyNumber) {
         });
     }
 
-    return globalKeyNameMap[keyNumber];
+    return globalKeyNameMap;
 };
 
 /**
@@ -123,6 +137,20 @@ statSchema.statics.getTypes = function () {
  * @return {String}
  */
 statSchema.statics.getTypeName = function (typeNumber) {
+    var typeNameMap = this.getTypeNameMap();
+
+    return globalTypeNameMap[typeNumber];
+};
+
+/**
+ * Get a map of types to names. Types are a type of statistic
+ *
+ * Lazy loads an object map as needed
+ *
+ * @method getTypeNameMap
+ * @return {Object}
+ */
+statSchema.statics.getTypeNameMap = function () {
     if (!globalTypeNameMap) {
         globalTypeNameMap = {};
 
@@ -131,7 +159,7 @@ statSchema.statics.getTypeName = function (typeNumber) {
         });
     }
 
-    return globalTypeNameMap[typeNumber];
+    return globalTypeNameMap;
 };
 
 /**
