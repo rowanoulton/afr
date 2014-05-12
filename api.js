@@ -37,7 +37,7 @@ app.use(bodyParser());
  *         is returned as undefined
  */
 getConfiguration = function () {
-    var configExists = fs.existsSync('./config/config.json'),
+    var configExists = fs.existsSync(__dirname + '/config/config.json'),
         configRaw,
         configObj;
 
@@ -50,7 +50,7 @@ getConfiguration = function () {
 
     // Retrieve configuration
     try {
-        configRaw = fs.readFileSync('./config/config.json');
+        configRaw = fs.readFileSync(__dirname + '/config/config.json');
         configObj = JSON.parse(configRaw);
     } catch (err) {
         console.log('🔧  -> Error loading configuration: ./config/config.json', err);
