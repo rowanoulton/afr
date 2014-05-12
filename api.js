@@ -6,10 +6,13 @@ var fs             = require('fs'),
     express        = require('express'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
-    mongoose       = require('mongoose'),
-    Suburb         = require('./models/suburb'),
-    Region         = require('./models/region'),
-    Statistics     = require('./models/stat');
+    mongoose       = require('mongoose');
+
+    // Routes
+    routes = {
+        regions: require(__dirname + '/routes/regions'),
+        suburbs: require(__dirname + '/routes/suburbs')
+    };
 
 /**
  * Declarations
@@ -72,5 +75,7 @@ if (!_.isUndefined(config)) {
         mongoose.connect(config.database.connectionUri);
     }
 
-    // @todo Provide API endpoints
+    app.use('/regions', routes.regions);
+    app.use('/region/:id/suburbs', routes.suburbs);
+    app.listen(3000);
 }
