@@ -11,7 +11,7 @@
     "url": "https://github.com/rowanoulton/afr.git"
   },
   "dependencies": {
-    "mongoose": ">=3.6",
+    "mongoose": "~3.8.9",
     "request": ">=2.34.0",
     "underscore": ">=1.6",
     "fast-stats": ">=0.0.2",
