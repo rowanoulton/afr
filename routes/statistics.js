@@ -15,7 +15,7 @@ router = new Router();
  * Statistics endpoint
  */
 router.get('/', function (req, res) {
-    var query  = Statistics.find(),
+    var query  = Statistics.find().lean(),
         region = parseInt(req.query.region),
         suburb = parseInt(req.query.suburb) || null,
         key    = parseInt(req.query.key),
@@ -53,13 +53,30 @@ router.get('/', function (req, res) {
         query.where('date').gte(date.toDate()).lt(dateLessThan.toDate());
     }
 
+    query.select({
+        _id: 0,
+        _suburb: 1,
+        key: 1,
+        type: 1,
+        value: 1,
+        date: 1
+    });
+
     query.exec(function (err, stats) {
         if (err) {
             res.send({ error: err.message });
             return;
         }
 
-        res.send(stats);
+        res.send(stats.map(function (stat) {
+            // Replace ISOString date with YYYY-MM-DD formatted date
+            stat.date = moment(stat.date).format('YYYY-MM-DD');
+
+            // Replace _suburb with suburb
+            stat.suburb = stat._suburb;
+            delete stat._suburb;
+            return stat;
+        }));
     });
 });
 
