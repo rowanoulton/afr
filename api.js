@@ -6,7 +6,7 @@ var fs             = require('fs'),
     express        = require('express'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
-    mongoose       = require('mongoose');
+    mongoose       = require('mongoose'),
 
     // Routes
     routes = {
