@@ -14,9 +14,22 @@ router = new Router();
  * Region list
  */
 router.get('/', function (req, res) {
-    Region.find({}, { name: 1 }, function (err, regions) {
-        if (err) throw err;
-        res.send(regions);
+    Region
+    .find()
+    .lean()
+    .select({ name: 1 })
+    .exec(function (err, regions) {
+        if (err) {
+            res.send({ error: err.message });
+            return;
+        }
+
+        res.send(regions.map(function (region) {
+            // Replace _id with id
+            region.id = region._id;
+            delete region._id;
+            return region;
+        }));
     });
 });
 
@@ -24,9 +37,28 @@ router.get('/', function (req, res) {
  * Suburb list
  */
 router.get('/:id/suburbs', function (req, res) {
-    Suburb.find({ _region: req.params.id }, { district: 1, name: 1, latitude: 1, longitude: 1 }, function (err, suburbs) {
-        if (err) throw err;
-        res.send(suburbs);
+    Suburb
+    .find()
+    .lean()
+    .where('_region').equals(req.params.id)
+    .select({
+        district: 1,
+        name: 1,
+        latitude: 1,
+        longitude: 1
+    })
+    .exec(function (err, suburbs) {
+        if (err) {
+            res.send({ error: err.message });
+            return;
+        }
+
+        res.send(suburbs.map(function (suburb) {
+            // Replace _id with id
+            suburb.id = suburb._id;
+            delete suburb._id;
+            return suburb;
+        }));
     });
 });
 
