@@ -64,11 +64,28 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
 /**
  * Get an array of key names for the types of data we calculate statistics for (e.g. "price", "price_per_room")
  *
+ * This excludes volume, as we handle volume as a special case
+ *
  * @method getKeys
  * @return {Array}
  */
 statSchema.statics.getKeys = function () {
     return globalKeys;
+};
+
+/**
+ * Get an array of key names for the types of data we calculate statistics for (e.g. "price", "price_per_room")
+ *
+ * This includes volume
+ *
+ * @method getExternalKeys
+ * @return {Array}
+ */
+statSchema.statics.getExternalKeys = function () {
+    var externalGlobalKeys = this.getKeys();
+
+    externalGlobalKeys.push('volume');
+    return externalGlobalKeys;
 };
 
 /**
