@@ -84,14 +84,14 @@ router.get('/', function (req, res) {
  * Types list
  */
 router.get('/types', function (req, res) {
-    res.send(Statistics.getTypeNameMap());
+    res.send(Statistics.getTypes());
 });
 
 /**
  * Keys list
  */
 router.get('/keys', function (req, res) {
-    res.send(Statistics.getKeyNameMap());
+    res.send(Statistics.getExternalKeys());
 });
 
 /**
