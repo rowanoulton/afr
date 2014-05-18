@@ -18,8 +18,8 @@ router.get('/', function (req, res) {
     var query  = Statistics.find().lean(),
         region = parseInt(req.query.region),
         suburb = parseInt(req.query.suburb) || null,
-        key    = parseInt(req.query.key),
-        type   = parseInt(req.query.type),
+        key    = req.query.key,
+        type   = req.query.type,
         date   = moment(req.query.day, 'YYYY-MM-DD', true),
         dateLessThan;
 
@@ -37,13 +37,23 @@ router.get('/', function (req, res) {
     query.where('_suburb', suburb);
 
     // Key (volume, price, etc)
-    if (!_.isNaN(key)) {
-        query.where('key', key);
+    if (!_.isUndefined(key)) {
+        if (_.indexOf(Statistics.getExternalKeys(), key) !== -1) {
+            query.where('key', Statistics.getKeyNumber(key));
+        } else {
+            res.send({error: 'Key "' + key + '" is invalid'});
+            return;
+        }
     }
 
     // Type (mean, median)
-    if (!_.isNaN(type)) {
-        query.where('type', type);
+    if (!_.isUndefined(type)) {
+        if (_.indexOf(Statistics.getTypes(), type) !== -1) {
+            query.where('type', Statistics.getTypeNumber(type)) ;
+        } else {
+            res.send({error: 'Type "' + type + '" is invalid'});
+            return;
+        }
     }
 
     // Date is specified as a range from the start of the given day to the very end,
@@ -71,6 +81,17 @@ router.get('/', function (req, res) {
         res.send(stats.map(function (stat) {
             // Replace ISOString date with YYYY-MM-DD formatted date
             stat.date = moment(stat.date).format('YYYY-MM-DD');
+
+            // Replace key with key name
+            stat.key = Statistics.getKeyName(stat.key);
+
+            if (stat.key === 'volume') {
+                // Volume does not officially have a type, so we must prune it from the returned object
+                delete stat.type;
+            } else {
+                // Replace type with type name
+                stat.type = Statistics.getTypeName(stat.type);
+            }
 
             // Replace _suburb with suburb
             stat.suburb = stat._suburb;
