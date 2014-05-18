@@ -9,7 +9,7 @@ var _        = require('underscore'),
 /**
  * Variables
  */
-var globalKeys  = ['price', 'price_per_room'],
+var globalKeys  = ['price', 'price_per_room', 'volume'],
     globalTypes = ['mean', 'median'],
     errorHandler,
     globalTypeMap,
@@ -71,21 +71,6 @@ statSchema.index({ _suburb: 1, _region: 1, date: 1, type: 1, key: 1 }, { unique:
  */
 statSchema.statics.getKeys = function () {
     return globalKeys;
-};
-
-/**
- * Get an array of key names for the types of data we calculate statistics for (e.g. "price", "price_per_room")
- *
- * This includes volume
- *
- * @method getExternalKeys
- * @return {Array}
- */
-statSchema.statics.getExternalKeys = function () {
-    var externalGlobalKeys = this.getKeys();
-
-    externalGlobalKeys.push('volume');
-    return externalGlobalKeys;
 };
 
 /**
@@ -224,9 +209,15 @@ statSchema.statics.fromSeries = function (config) {
         keys         = this.getKeys(),
         types        = this.getTypes(),
         todayDb      = this.getDatabaseDate(),
-        numOfStats   = (keys.length * types.length) + 1,
         numProcessed = 0,
+        numOfStats,
         handleSaveCallback;
+
+    // Prune volume from list of keys as it is handled specially
+    delete keys[_.indexOf(keys, 'volume')];
+
+    // Now that volume has been removed, calculate the total number of statistics to be processed
+    numOfStats = (keys.length * types.length) + 1;
 
     /*
      * Callback for persisting statistics to database. Handles error logging and invocation of callback on completion

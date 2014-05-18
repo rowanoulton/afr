@@ -38,7 +38,7 @@ router.get('/', function (req, res) {
 
     // Key (volume, price, etc)
     if (!_.isUndefined(key)) {
-        if (_.indexOf(Statistics.getExternalKeys(), key) !== -1) {
+        if (_.indexOf(Statistics.getKeys(), key) !== -1) {
             query.where('key', Statistics.getKeyNumber(key));
         } else {
             res.send({error: 'Key "' + key + '" is invalid'});
@@ -112,7 +112,7 @@ router.get('/types', function (req, res) {
  * Keys list
  */
 router.get('/keys', function (req, res) {
-    res.send(Statistics.getExternalKeys());
+    res.send(Statistics.getKeys());
 });
 
 /**
