@@ -21,6 +21,7 @@
     "express": "4.2.0",
     "body-parser": "1.x",
     "method-override": "1.x",
-    "moment": "~2.6.0"
+    "moment": "~2.6.0",
+    "chai": "~1.9.1"
   }
 }
