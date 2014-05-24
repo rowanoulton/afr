@@ -1,5 +1,6 @@
 ![Auckland For Rent](http://i.imgur.com/lgtjyJ6.png)
-=================
+
+
 
 AFR polls the [Trademe API](http://developer.trademe.co.nz/) for rental listings each day and processes the results into a digest of statistics. It also provides an easy-to-use API endpoint for access to the data.
 
