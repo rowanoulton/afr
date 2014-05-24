@@ -28,7 +28,7 @@ Other statistics will be introduced in future, such as information about standar
 
 #### The collection script
 
-In order to run the collection script you must copy and create your own configuration file. A template is provided here: [config/config.default.json](https://github.com/rowanoulton/afr/blob/master/config/config.default.json). 
+In order to run the collection script you must copy and create your own configuration file. A template is provided here: [config/config.default.json](https://github.com/rowanoulton/afr/blob/master/config/config.default.json).
 
 Copy and rename yours to `config/config.json`, filling in the necessary fields. See the configuration section below for more information.
 
@@ -50,7 +50,7 @@ AFR uses MongoDB, and as such you must also specify a connection URI for both th
 
 The regions which are collected by the daemon script ([afrd.js](https://github.com/rowanoulton/afr/blob/master/afrd.js)) are configurable. In `config/config.json` you can specify an array of regions to collect statistics for:
 
-```
+```json
 "regions": [
     {
         "id": "your-region-id",
@@ -60,7 +60,7 @@ The regions which are collected by the daemon script ([afrd.js](https://github.c
 ```
 The region ids must match the id given by the Trademe API. You can find a full list of regions [here](http://api.trademe.co.nz/v1/Localities.json). The region name does not have to match. As an example, if you wanted to collect statistics for both Auckland and Wellington, your configuration might look like this:
 
-```
+```json
 "regions": [
     {
         "id": 1,
