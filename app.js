@@ -29,6 +29,7 @@ app = express();
 app.use(methodOverride());
 app.use(bodyParser());
 app.set('view engine', 'hbs');
+app.set('views', __dirname + '/app/views');
 
 /**
  * Load configuration from JSON
