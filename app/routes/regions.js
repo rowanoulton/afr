@@ -2,8 +2,8 @@
  * Dependencies
  */
 var Router = require('express').Router,
-    Region = require(__dirname + '/../models/region'),
-    Suburb = require(__dirname + '/../models/suburb');
+    Region = require(__dirname + '/../../collector/models/region'),
+    Suburb = require(__dirname + '/../../collector/models/suburb');
 
 /**
  * Regions endpoint

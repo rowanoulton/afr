@@ -10,8 +10,8 @@ var fs             = require('fs'),
 
     // Routes
     routes = {
-        regions: require(__dirname + '/routes/regions'),
-        statistics: require(__dirname + '/routes/statistics')
+        regions: require(__dirname + '/app/routes/regions'),
+        statistics: require(__dirname + '/app/routes/statistics')
     };
 
 /**

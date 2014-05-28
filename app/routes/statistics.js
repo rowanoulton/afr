@@ -4,7 +4,7 @@
 var _          = require('underscore'),
     moment     = require('moment'),
     Router     = require('express').Router,
-    Statistics = require(__dirname + '/../models/stat');
+    Statistics = require(__dirname + '/../../collector/models/stat');
 
 /**
  * Statistics router
