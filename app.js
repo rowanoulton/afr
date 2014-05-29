@@ -7,6 +7,7 @@ var fs             = require('fs'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
     mongoose       = require('mongoose'),
+    ejs            = require('ejs'),
 
     // Routes
     routes = {
@@ -28,7 +29,8 @@ var getConfiguration,
 app = express();
 app.use(methodOverride());
 app.use(bodyParser());
-app.set('view engine', 'hbs');
+app.set('view engine', 'html');
+app.engine('html', ejs.renderFile);
 app.set('views', __dirname + '/app/views');
 
 /**
