@@ -9,3 +9,6 @@ config/config.json
 
 # Logs
 logs/*
+
+# Build
+public/assets/*
