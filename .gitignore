@@ -11,4 +11,9 @@ config/config.json
 logs/*
 
 # Build
-public/assets/*
+public/assets/css/
+public/assets/js/
+public/assets/img/
+
+# Compass
+.sass-cache/
