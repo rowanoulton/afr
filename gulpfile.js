@@ -3,6 +3,7 @@
  */
 var gulp       = require('gulp'),
     compass    = require('gulp-compass'),
+    imagemin   = require('gulp-imagemin'),
     jshint     = require('gulp-jshint'),
     browserify = require('browserify'),
     source     = require('vinyl-source-stream');
@@ -11,6 +12,7 @@ var gulp       = require('gulp'),
  * Setup
  */
 var paths = {
+    images: './app/img/*',
     compass: './app/scss/*.scss',
     compassWatch: './app/scss/**/*.scss',
     scripts: './app/scripts/**/*.js',
@@ -33,6 +35,12 @@ gulp.task('compass', function () {
         .pipe(gulp.dest('./public/assets/css'));
 });
 
+gulp.task('images', function () {
+    return gulp.src(paths.images)
+        .pipe(imagemin())
+        .pipe(gulp.dest('./public/assets/img'));
+});
+
 gulp.task('browserify', function() {
     return browserify(paths.browserify)
         .bundle()
@@ -43,7 +51,8 @@ gulp.task('browserify', function() {
 gulp.task('watch', function () {
     gulp.watch(paths.scripts, ['lint', 'browserify']);
     gulp.watch(paths.compassWatch, ['compass']);
+    gulp.watch(paths.images, ['images']);
 });
 
-gulp.task('build', ['lint', 'browserify', 'compass']);
+gulp.task('build', ['lint', 'browserify', 'compass', 'images']);
 gulp.task('default', ['build', 'watch']);
