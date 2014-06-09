@@ -1,12 +1,24 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="afrApp">
 <head>
     <meta charset="UTF-8">
     <title>Auckland for rent</title>
     <link rel="stylesheet" href="/assets/css/screen.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
 </head>
 <body ng-controller="HelloCtrl">
-    Hello {{person}}
+    <div id="wrap">
+        <header>
+            <nav>
+                <ul>
+                    <% regions.forEach(function (region) { %><li><a href="#"><%= region.name %></a></li><% }) %>
+                </ul>
+            </nav>
+        </header>
+        <footer>
+            <a href="/" id="logo"><img src="/assets/img/logo.png" alt="Auckland For Rent" /></a>
+        </footer>
+    </div>
     <script src="/assets/js/afr.js"></script>
 </body>
 </html>
