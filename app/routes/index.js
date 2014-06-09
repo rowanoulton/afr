@@ -1,7 +1,8 @@
 /**
  * Dependencies
  */
-var Router = require('express').Router;
+var Router = require('express').Router,
+    Region = require('../../collector/models/region');
 
 /**
  * Index router
@@ -12,7 +13,9 @@ router = new Router();
  * Index route
  */
 router.get('/', function (req, res) {
-    res.render('index', { a: 'rowan' });
+    Region.find({}, {name: 1}, function (err, regions) {
+        res.render('index', { regions: regions });
+    });
 });
 
 /**
