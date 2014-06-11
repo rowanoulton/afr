@@ -19,3 +19,18 @@ app.controller('RegionCtrl', function($scope, $http) {
     return region === $scope.selectedRegion ? 'is-selected' : '';
   };
 });
+
+app.controller('SuburbCtrl', function ($scope, $http) {
+    $scope.$watch('selectedRegion', function (selectedRegion) {
+        if (selectedRegion) {
+            $http.get('/regions/' + selectedRegion.id + '/suburbs').success(function (suburbs) {
+                $scope.suburbs        = suburbs;
+                $scope.selectedSuburb = $scope.suburbs[0];
+            });
+        }
+    });
+
+    $scope.select = function (suburb) {
+        $scope.selectedSuburb = suburb;
+    };
+});

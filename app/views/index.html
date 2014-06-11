@@ -15,6 +15,12 @@
                 </ul>
             </nav>
         </header>
+        <section ng-controller="SuburbCtrl">
+            <select
+                ng-model="selectedSuburb"
+                ng-options="suburb.name for suburb in suburbs">
+            </select>
+        </section>
         <footer>
             <a href="/" id="logo"><img src="/assets/img/logo.png" alt="Auckland For Rent" /></a>
         </footer>
