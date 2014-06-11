@@ -1,4 +1,4 @@
-/*jshint undef:true, unused:true*/
+/*jshint undef:true, unused:true, browser:true, devel:true */
 /*global require*/
 
 var angular = require('angular');
