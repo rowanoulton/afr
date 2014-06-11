@@ -16,10 +16,14 @@
             </nav>
         </header>
         <section ng-controller="SuburbCtrl">
-            <select
-                ng-model="selectedSuburb"
-                ng-options="suburb.name for suburb in suburbs">
-            </select>
+            <div class="suburb-selector-wrap">
+                <span class="suburb-selector-chevron"></span>
+                <select
+                    class="suburb-selector"
+                    ng-model="selectedSuburb"
+                    ng-options="suburb.name for suburb in suburbs">
+                </select>
+            </div>
         </section>
         <footer>
             <a href="/" id="logo"><img src="/assets/img/logo.png" alt="Auckland For Rent" /></a>

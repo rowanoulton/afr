@@ -19,3 +19,42 @@ a {
     text-decoration: none;
     color: #222;
 }
+
+.suburb-selector-wrap {
+    position: relative;
+}
+
+.suburb-selector {
+    @include appearance(none);
+    background: transparent;
+    border-width: 2px;
+    padding: 9px 12px;
+    display: block;
+    width: 100%;
+    margin: 30px auto;
+    border-color: #ccc;
+    color: #222;
+    font-size: 21px;
+}
+
+.suburb-selector-chevron {
+    pointer-events: none;
+    position: absolute;
+    top: 17px;
+    right: 25px;
+
+    &::before {
+        @include transform(rotate(135deg));
+        border-style: solid;
+        border-color: #ccc;
+        border-width: 2px 2px 0 0;
+        content: '';
+        display: inline-block;
+        height: 10px;
+        left: 5px;
+        position: relative;
+        vertical-align: top;
+        width: 10px;
+        top: 0;
+    }
+}
