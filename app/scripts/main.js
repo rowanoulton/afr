@@ -6,8 +6,8 @@ var angular = require('angular');
 var app = angular.module('afrApp', []);
 
 app.controller('RegionCtrl', function($scope, $http) {
-  $http.get('/regions').success(function (data) {
-    $scope.regions  = data;
+  $http.get('/regions').success(function (regions) {
+    $scope.regions  = regions;
     $scope.selectedRegion = $scope.regions[0];
   });
 
