@@ -51,7 +51,7 @@ gulp.task('browserify', function() {
         .pipe(gulp.dest('./public/assets/js'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['build'], function () {
     gulp.watch(paths.scripts, ['lint', 'browserify']);
     gulp.watch(paths.compassWatch, ['compass']);
     gulp.watch(paths.images, ['images']);
