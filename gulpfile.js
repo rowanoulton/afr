@@ -58,4 +58,4 @@ gulp.task('watch', ['build'], function () {
 });
 
 gulp.task('build', ['lint', 'browserify', 'compass', 'images']);
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['watch']);
