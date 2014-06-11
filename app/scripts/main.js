@@ -10,7 +10,7 @@ app.controller('RegionCtrl', function($scope, $http) {
     $scope.regions = data;
   });
 
-  $scope.selectRegion = function (region) {
-    console.log('Selected Region', region);
+  $scope.select = function (region) {
+
   };
 });
