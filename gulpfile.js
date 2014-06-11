@@ -2,9 +2,11 @@
  * Dependencies
  */
 var gulp       = require('gulp'),
+    streamify  = require('gulp-streamify'),
     compass    = require('gulp-compass'),
     imagemin   = require('gulp-imagemin'),
     jshint     = require('gulp-jshint'),
+    ngAnnotate = require('gulp-ng-annotate'),
     browserify = require('browserify'),
     source     = require('vinyl-source-stream');
 
@@ -45,6 +47,7 @@ gulp.task('browserify', function() {
     return browserify(paths.browserify)
         .bundle()
         .pipe(source('afr.js'))
+        .pipe(streamify(ngAnnotate()))
         .pipe(gulp.dest('./public/assets/js'));
 });
 
