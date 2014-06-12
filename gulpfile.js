@@ -3,6 +3,7 @@
  */
 var gulp       = require('gulp'),
     streamify  = require('gulp-streamify'),
+    karma      = require('gulp-karma'),
     compass    = require('gulp-compass'),
     imagemin   = require('gulp-imagemin'),
     jshint     = require('gulp-jshint'),
@@ -18,7 +19,12 @@ var paths = {
     compass: './app/scss/*.scss',
     compassWatch: './app/scss/**/*.scss',
     scripts: './app/scripts/**/*.js',
-    browserify: './app/scripts/main.js'
+    browserify: './app/scripts/main.js',
+    tests: [
+        './public/assets/js/**/*.js',
+        './app/scripts/vendor/*.js',
+        './app/test/**/*.js'
+    ]
 };
 
 gulp.task('lint', function () {
@@ -51,10 +57,30 @@ gulp.task('browserify', function() {
         .pipe(gulp.dest('./public/assets/js'));
 });
 
+gulp.task('test', function () {
+    return gulp.src(paths.tests)
+        .pipe(karma({
+            configFile: './config/karma.conf.js',
+            action: 'run'
+        }))
+        .on('error', function (err) {
+            throw err;
+        });
+});
+
 gulp.task('watch', ['build'], function () {
     gulp.watch(paths.scripts, ['lint', 'browserify']);
     gulp.watch(paths.compassWatch, ['compass']);
     gulp.watch(paths.images, ['images']);
+
+    // Due to the way Karma works, using gulp.watch to watch files results in contrived usage that doesn't work as
+    // expected in some cases. As a result, Karma's watch mechanism is employed to make usage of this plugin as straight
+    // forward as possible.
+    gulp.src(paths.tests)
+        .pipe(karma({
+            configFile: './config/karma.conf.js',
+            action: 'watch'
+        }));
 });
 
 gulp.task('build', ['lint', 'browserify', 'compass', 'images']);

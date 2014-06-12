@@ -32,6 +32,7 @@
     "gulp-imagemin": "~0.5.1",
     "gulp-ng-annotate": "~0.1.1",
     "gulp-streamify": "~0.0.5",
+    "gulp-karma": "~0.0.4",
     "angular": "~1.2.16"
   },
   "devDependencies": {
