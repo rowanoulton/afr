@@ -1,3 +1,4 @@
+/*jshint ignore:start*/
 /**
  * @license AngularJS v1.2.16
  * (c) 2010-2014 Google, Inc. http://angularjs.org
@@ -2161,3 +2162,4 @@ if(window.jasmine || window.mocha) {
 
 
 })(window, window.angular);
+/*jshint ignore:end*/
