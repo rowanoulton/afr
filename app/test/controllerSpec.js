@@ -1,6 +1,5 @@
 'use strict';
 
-
 describe('afrApp.controllers', function () {
     var $scope = null;
 
