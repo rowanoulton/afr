@@ -1,6 +1,9 @@
 @import "modules/btn-group/variables";
 @mixin afr-btn-group {
     .btn-group {
+        @include transition-property(opacity);
+        @include transition-duration(200ms);
+        @include transition-timing-function(ease-in-out);
         position: relative;
         display: inline-block;
         vertical-align: middle;
@@ -27,5 +30,10 @@
         .btn + .btn {
             margin-left: -1px;
         }
+    }
+
+    .btn-group--disabled {
+        opacity: 0.5;
+        pointer-events: none;
     }
 }
