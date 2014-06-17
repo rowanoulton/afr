@@ -59,6 +59,18 @@ app.controller('StatisticCtrl', function ($scope, $http) {
   };
 
   $scope.getTypeClass = function (type) {
-    return type === $scope.selectedType ? 'btn--selected' : '';
+    var hasKeys          = ($scope.keys || $scope.selectedKey),
+        isVolumeSelected = (hasKeys && $scope.selectedKey === 'volume'),
+        isSelectedType    = (type === $scope.selectedType);
+
+    return (isSelectedType && (!hasKeys || !isVolumeSelected)) ? 'btn--selected' : '';
+  };
+
+  $scope.getTypeGroupClass = function () {
+    if ($scope.keys && $scope.selectedKey) {
+      return $scope.selectedKey === 'volume' ? 'btn-group--disabled' : '';
+    }
+
+    return '';
   };
 });

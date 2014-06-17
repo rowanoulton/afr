@@ -30,7 +30,7 @@
                     <div class="btn-group left">
                         <a href="#" ng-repeat="key in keys" ng-click="selectKey(key)" ng-class="getKeyClass(key)" class="btn">{{ key }}</a>
                     </div>
-                    <div class="btn-group right">
+                    <div class="btn-group right" ng-class="getTypeGroupClass()">
                         <a href="#" ng-repeat="type in types" ng-click="selectType(type)" ng-class="getTypeClass(type)" class="btn">{{ type }}</a>
                     </div>
                 </div>
