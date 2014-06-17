@@ -43,5 +43,7 @@ footer {
     text-align: center;
 }
 
-.left  { float: left; }
-.right { float: right; }
+// Surgical classes
+.left     { float: left; }
+.right    { float: right; }
+.clearfix { @include clearfix; }
