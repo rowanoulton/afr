@@ -30,7 +30,35 @@ app.controller('SuburbCtrl', function ($scope, $http) {
         }
     });
 
-    $scope.select = function (suburb) {
-        $scope.selectedSuburb = suburb;
-    };
+    $scope.$watch('selectedSuburb', function () {
+      // @todo
+    });
+});
+
+app.controller('StatisticCtrl', function ($scope, $http) {
+  $http.get('/statistics/keys').success(function (keys) {
+    $scope.keys        = keys;
+    $scope.selectedKey = $scope.keys[0];
+  });
+
+  $http.get('/statistics/types').success(function (types) {
+    $scope.types        = types;
+    $scope.selectedType = $scope.types[0];
+  });
+
+  $scope.selectKey = function (key) {
+    $scope.selectedKey = key;
+  };
+
+  $scope.selectType = function (type) {
+    $scope.selectedType = type;
+  };
+
+  $scope.getKeyClass = function (key) {
+    return key === $scope.selectedKey ? 'btn--selected' : '';
+  };
+
+  $scope.getTypeClass = function (type) {
+    return type === $scope.selectedType ? 'btn--selected' : '';
+  };
 });
