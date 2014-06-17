@@ -2,34 +2,34 @@
 @mixin afr-btn {
     .btn {
         @include transition-property(box-shadow);
-        @include transition-duration(100ms);
+        @include transition-duration($btn-transition-duration);
         @include transition-timing-function(ease-in-out);
-        @include background-image(linear-gradient('top', color_stops(#eee, darken(#eee, 15%))));
-        @include border-radius(5px);
+        @include background-image(linear-gradient('top', $btn-background-gradient));
+        @include border-radius($btn-border-radius);
         @include text-shadow(rgba(255, 255, 255, 0.5) 0 1px 0);
         display: inline-block;
-        padding: 6px 12px;
-        border: 1px solid darken(#eee, 50%);
-        color: #222;
+        padding: $btn-padding;
+        border: 1px solid $btn-border-color;
+        color: $btn-color;
 
         &:hover {
-            @include box-shadow(rgba(0, 0, 0, 0.5) 0 0 5px inset);
+            @include box-shadow($btn-box-shadow-over);
         }
 
         &:active {
-            @include box-shadow(rgba(0, 0, 0, 0.5) 0 0 10px inset);
-            background: #bbb;
-            color: #000;
+            @include box-shadow($btn-box-shadow-down);
+            background: $btn-background-color-down;
+            color: $btn-color-down;
         }
     }
 
     .btn--selected {
-        @include box-shadow(rgba(0, 0, 0, 0.5) 0 0 10px inset);
-        background: #bbb;
-        color: #000;
+        @include box-shadow($btn--selected-box-shadow);
+        background: $btn--selected-background-color;
+        color: $btn--selected-color;
 
         &:hover {
-            @include box-shadow(rgba(0, 0, 0, 0.5) 0 0 10px inset);
+            @include box-shadow($btn--selected-box-shadow-over);
         }
     }
 }
