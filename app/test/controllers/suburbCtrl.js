@@ -88,19 +88,4 @@ describe('SuburbCtrl', function () {
 
         $httpBackend.verifyNoOutstandingRequest();
     });
-
-    it('should updated the suburb selection when a suburb is selected', function() {
-        var controller = createController();
-
-        $rootScope.$apply(function () {
-            $rootScope.selectedRegion = selectedRegion;
-        });
-
-        $httpBackend.flush();
-
-        $rootScope.select(suburbs[1]);
-        expect($rootScope.selectedSuburb).toEqual(suburbs[1]);
-        $rootScope.select(suburbs[0]);
-        expect($rootScope.selectedSuburb).toEqual(suburbs[0]);
-    });
 });
