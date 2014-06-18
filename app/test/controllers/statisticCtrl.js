@@ -59,6 +59,12 @@ describe('StatisticCtrl', function () {
         expect($rootScope.types).toEqual(types);
     });
 
+    it('should request all the necessary data on construction', function () {
+        var controller = createController();
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+    });
+
     it('should set a selected key once regions have been loaded from server', function () {
         var controller = createController();
 
