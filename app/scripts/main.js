@@ -53,8 +53,6 @@ app.controller('StatisticCtrl', function ($scope, $http) {
         requestParams;
 
     if (canProceed) {
-        console.log([$scope.selectedSuburb.name, $scope.selectedKey, $scope.selectedType].join(', '), $scope.selectedRegion);
-
         requestParams = {
           region: $scope.selectedRegion.id,
           suburb: $scope.selectedSuburb.id,
