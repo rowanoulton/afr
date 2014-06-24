@@ -5,6 +5,8 @@ describe('StatisticCtrl', function () {
         $rootScope,
         $controller,
         createController,
+        addLocationToScope,
+        stats,
         types,
         keys;
 
@@ -14,6 +16,28 @@ describe('StatisticCtrl', function () {
         $httpBackend = $injector.get('$httpBackend');
         $rootScope   = $injector.get('$rootScope');
         $controller  = $injector.get('$controller');
+
+        stats = [
+            {
+                "key":"price",
+                "type":"median",
+                "value":420,
+                "date":"2014-05-05",
+                "suburb":368
+            } , {
+                "key":"price",
+                "type":"median",
+                "value":420,
+                "date":"2014-05-06",
+                "suburb":368
+            } , {
+                "key":"price",
+                "type":"median",
+                "value":450,"date":
+                "2014-05-28",
+                "suburb":368
+            }
+        ];
 
         types = [
             'a',
@@ -34,10 +58,71 @@ describe('StatisticCtrl', function () {
             .expectGET('/statistics/types')
             .respond(types);
 
+        $httpBackend
+            .when('GET', '/statistics?key=key1&region=1&suburb=368&type=a')
+            .respond(stats);
+
+        /*
+         * Create an instance of StatisticCtrl with $rootScope assigned
+         *
+         * @method createController
+         * @return StatisticCtrl
+         */
         createController = function () {
             return $controller('StatisticCtrl', { $scope: $rootScope });
         };
+
+        /*
+         * Add selectedSuburb and selectedRegion to the controller scope. These are requirements for requesting stats
+         *
+         * @method addLocationToScope
+         */
+        addLocationToScope = function () {
+            $rootScope.selectedRegion = { id: 1 };   // Mock for Auckland
+            $rootScope.selectedSuburb = { id: 368 }; // Mock for City Centre
+        };
     }));
+
+    it('should define defaults for the sorting of the statistic table', function () {
+        var controller = createController();
+
+        expect($rootScope.sortPredicate).toBeDefined();
+        expect($rootScope.sortPredicate).toEqual('date');
+        expect($rootScope.sortReverse).toBeDefined();
+        expect($rootScope.sortReverse).toEqual(true);
+    });
+
+    it('should define an empty set of statistics', function () {
+        var controller = createController();
+
+        expect($rootScope.statistics.length).toBe(0);
+        expect($rootScope.statistics).toEqual([]);
+    });
+
+    it('should define a loading state for requesting statistics', function () {
+        var controller = createController();
+
+        expect($rootScope.isLoadingStatistics).toBeDefined();
+        expect($rootScope.isLoadingStatistics).toBe(false);
+    });
+
+    it('should request statistics when suburb and key are set', function () {
+        var controller = createController();
+
+        // Load types and keys
+        $httpBackend.flush();
+
+        // Set up expectation of statistics being loaded
+        $httpBackend.expectGET('/statistics?key=key1&region=1&suburb=368&type=a');
+
+        // Load statistics (hopefully) and check that it actually happened
+        addLocationToScope();
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+
+        // Confirm statistics have been stored
+        expect($rootScope.statistics.length).toBe(3);
+    });
 
     it('should request keys from server', function() {
         var controller = createController();
