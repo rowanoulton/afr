@@ -34,6 +34,25 @@
                         <a href="#" ng-repeat="type in types" ng-click="selectType(type)" ng-class="getTypeClass(type)" class="btn">{{ type }}</a>
                     </div>
                 </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="50%">Date</th>
+                            <th width="50%" class="txtR">{{selectedKey | capitalize}}</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-if="statistics.length === 0">
+                        <tr>
+                            <td colspan="2" class="txtC">Select a statistic to load.</td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-if="statistics.length !== 0">
+                        <tr ng-repeat="statistic in statistics">
+                            <td>{{statistic.date}}</td>
+                            <td class="txtR">{{statistic.value | number : 2 }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
         <footer>

@@ -44,6 +44,33 @@ app.controller('SuburbCtrl', function ($scope, $http) {
 });
 
 app.controller('StatisticCtrl', function ($scope, $http) {
+  var loadStatistics;
+
+  $scope.statistics = [];
+
+  loadStatistics = function () {
+    var canProceed = ($scope.selectedSuburb && $scope.selectedKey),
+        requestParams;
+
+    if (canProceed) {
+        console.log([$scope.selectedSuburb.name, $scope.selectedKey, $scope.selectedType].join(', '), $scope.selectedRegion);
+
+        requestParams = {
+          region: $scope.selectedRegion.id,
+          suburb: $scope.selectedSuburb.id,
+          key:    $scope.selectedKey
+        };
+
+        if ($scope.selectedKey !== 'volume') {
+          requestParams.type = $scope.selectedType;
+        }
+
+        $http.get('/statistics', { params: requestParams }).success(function (statistics) {
+          $scope.statistics = statistics;
+        });
+    }
+  };
+
   $http.get('/statistics/keys').success(function (keys) {
     $scope.keys        = keys;
     $scope.selectedKey = $scope.keys[0];
@@ -81,4 +108,8 @@ app.controller('StatisticCtrl', function ($scope, $http) {
 
     return '';
   };
+
+  $scope.$watch('selectedSuburb', loadStatistics);
+  $scope.$watch('selectedType', loadStatistics);
+  $scope.$watch('selectedKey', loadStatistics);
 });
