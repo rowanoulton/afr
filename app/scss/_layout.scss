@@ -76,16 +76,19 @@ table {
             cursor: pointer;
         }
 
+        // For table headers not currently responsible for sorting, show no chevron
         .chevron {
             display: none;
         }
 
+        // For ascending-sorted headers, display the chevron flipped 180 degrees
         &.is-sorted .chevron {
             @include transform(rotate(180deg));
             margin-left: 15px;
             margin-right: -10px;
         }
 
+        // For table headers currently responsible for sorting, show the chevron
         &.is-sorted,
         &.is-sorted--reversed {
           .chevron { display: inline-block; }
