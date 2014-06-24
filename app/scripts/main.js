@@ -46,7 +46,8 @@ app.controller('SuburbCtrl', function ($scope, $http) {
 app.controller('StatisticCtrl', function ($scope, $http) {
   var loadStatistics;
 
-  $scope.statistics = [];
+  $scope.statistics          = [];
+  $scope.isLoadingStatistics = false;
 
   loadStatistics = function () {
     var canProceed = ($scope.selectedSuburb && $scope.selectedKey),
@@ -65,7 +66,10 @@ app.controller('StatisticCtrl', function ($scope, $http) {
           requestParams.type = $scope.selectedType;
         }
 
+        $scope.isLoadingStatistics = true;
+
         $http.get('/statistics', { params: requestParams }).success(function (statistics) {
+          $scope.isLoadingStatistics = false;
           $scope.statistics = statistics;
         });
     }

@@ -43,7 +43,7 @@
                     </thead>
                     <tbody ng-if="statistics.length === 0">
                         <tr>
-                            <td colspan="2" class="txtC">Select a statistic to load.</td>
+                            <td colspan="2" class="txtC">{{isLoadingStatistics ? 'Loading...' : 'Select a statistic to load.'}}</td>
                         </tr>
                     </tbody>
                     <tbody ng-if="statistics.length !== 0">
