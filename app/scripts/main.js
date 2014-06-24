@@ -5,6 +5,14 @@ var angular = require('angular');
 
 var app = angular.module('afrApp', []);
 
+app.filter('capitalize', function () {
+  return function (input) {
+    if (input) {
+      return input.charAt(0).toUpperCase() + input.slice(1);
+    }
+  };
+});
+
 app.controller('RegionCtrl', function($scope, $http) {
   $http.get('/regions').success(function (regions) {
     $scope.regions        = regions;
