@@ -9,3 +9,11 @@ config/config.json
 
 # Logs
 logs/*
+
+# Build
+public/assets/css/
+public/assets/js/
+public/assets/img/
+
+# Compass
+.sass-cache/

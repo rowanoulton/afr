@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" ng-app="afrApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Auckland for rent</title>
+    <link rel="stylesheet" href="/assets/css/screen.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+</head>
+<body ng-controller="RegionCtrl">
+    <div id="wrap">
+        <header>
+            <nav>
+                <ul>
+                    <li ng-repeat="region in regions"><a href="#" ng-click="select(region)" ng-class="getClass(region)">{{ region.name }}</a></li>
+                </ul>
+            </nav>
+        </header>
+        <section ng-controller="SuburbCtrl">
+            <div class="suburb-selector-wrap">
+                <span class="suburb-selector-chevron"></span>
+                <select
+                    class="suburb-selector"
+                    ng-model="selectedSuburb"
+                    ng-change="selected()"
+                    ng-options="suburb.name for suburb in suburbs">
+                </select>
+            </div>
+            <div ng-controller="StatisticCtrl">
+                <div class="clearfix">
+                    <div class="btn-group left">
+                        <a href="#" ng-repeat="key in keys" ng-click="selectKey(key)" ng-class="getKeyClass(key)" class="btn">{{ key }}</a>
+                    </div>
+                    <div class="btn-group right" ng-class="getTypeGroupClass()">
+                        <a href="#" ng-repeat="type in types" ng-click="selectType(type)" ng-class="getTypeClass(type)" class="btn">{{ type }}</a>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="50%" ng-class="getSortClass('date')" ng-click="sortReverse = (sortPredicate === 'date') ? !sortReverse : sortReverse; sortPredicate = 'date'">Date<span class="chevron"></span></th>
+                            <th width="50%" ng-class="getSortClass('value')" ng-click="sortReverse = (sortPredicate === 'value') ? !sortReverse : sortReverse; sortPredicate = 'value'" class="txtR">{{selectedKey | capitalize}}<span class="chevron"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody ng-if="statistics.length === 0">
+                        <tr>
+                            <td colspan="2" class="txtC">{{isLoadingStatistics ? 'Loading...' : 'Select a statistic to load.'}}</td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-if="statistics.length !== 0">
+                        <tr ng-repeat="statistic in statistics | orderBy:sortPredicate:sortReverse">
+                            <td>{{statistic.date}}</td>
+                            <td class="txtR">{{statistic.value | number : 2 }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <footer>
+            <a href="/" id="logo"><img src="/assets/img/logo.png" alt="Auckland For Rent" /></a>
+        </footer>
+    </div>
+    <script src="/assets/js/afr.js"></script>
+</body>
+</html>

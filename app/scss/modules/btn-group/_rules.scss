@@ -1,0 +1,44 @@
+@import "modules/btn-group/variables";
+@mixin afr-btn-group {
+    .btn-group {
+        @include transition-property(all);
+        @include transition-duration(200ms);
+        @include transition-timing-function(ease-in-out);
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+
+        .btn {
+            position: relative;
+            float: left;
+
+            &:first-child:not(:last-child) {
+                @include border-top-right-radius(0);
+                @include border-bottom-right-radius(0);
+            }
+
+            &:last-child:not(:first-child) {
+                @include border-top-left-radius(0);
+                @include border-bottom-left-radius(0);
+            }
+
+            &:not(:first-child):not(:last-child) {
+                @include border-radius(0);
+            }
+        }
+
+        .btn + .btn {
+            margin-left: -1px;
+        }
+    }
+
+    .btn-group--disabled {
+        opacity: 0.25;
+        pointer-events: none;
+
+        .btn {
+            color: #999;
+            border-color: #aaa;
+        }
+    }
+}

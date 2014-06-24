@@ -1,0 +1,125 @@
+#wrap {
+    max-width: 980px;
+    margin: 30px auto;
+}
+
+nav {
+    text-align: center;
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    li {
+        display: inline;
+    }
+
+    a {
+        @include transition-property(border-color);
+        @include transition-duration(0.1s);
+        @include transition-timing-function(ease-in-out);
+        display: inline-block;
+        border-bottom: 2px solid #ccc;
+        padding: 9px 18px;
+        height: 50px;
+
+        &:hover {
+            color: #111;
+            border-color: #666;
+        }
+
+        &.is-selected {
+            color: #000;
+            font-weight: 600;
+            border-color: purple;
+        }
+    }
+}
+
+.chevron {
+    display: inline-block;
+    margin-left: 5px; // Due to overlap of default chevron, push away LHS
+
+    &::before {
+        @include transform(rotate(135deg));
+        border-style: solid;
+        border-color: #222;
+        border-width: 2px 2px 0 0;
+        content: '';
+        display: inline-block;
+        height: 7px;
+        left: 5px;
+        position: relative;
+        vertical-align: top;
+        width: 7px;
+        top: 5px;
+    }
+}
+
+table {
+    margin: 30px 0;
+    width: 100%;
+
+    td,
+    th {
+        padding: 9px 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    th {
+        font-weight: bold;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        // For table headers not currently responsible for sorting, show no chevron
+        .chevron {
+            display: none;
+        }
+
+        // For ascending-sorted headers, display the chevron flipped 180 degrees
+        &.is-sorted .chevron {
+            @include transform(rotate(180deg));
+            margin-left: 15px;
+            margin-right: -10px;
+        }
+
+        // For table headers currently responsible for sorting, show the chevron
+        &.is-sorted,
+        &.is-sorted--reversed {
+          .chevron { display: inline-block; }
+        }
+    }
+
+    td {
+        border-right: 1px solid #ddd;
+        &:first-of-type { border-left: 1px solid #ddd; }
+    }
+
+    // Striping
+    tbody tr:nth-child(2n) td { background: #e8e8e8; }
+}
+
+footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+// Surgical classes
+.left     { float: left; }
+.right    { float: right; }
+.clearfix { @include clearfix; }
+
+// Horizontal alignment
+.txtC, table .txtC, table tr .txtC { text-align:center; }
+.txtL, table .txtL, table tr .txtL { text-align:left; }
+.txtR, table .txtR, table tr .txtR { text-align:right; }
+
+// Vertical alignment
+.txtT, table .txtT, table tr .txtT { vertical-align:top; }
+.txtB, table .txtB, table tr .txtB { vertical-align:bottom; }
+.txtM, table .txtM, table tr .txtM { vertical-align:middle; }

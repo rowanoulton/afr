@@ -7,9 +7,11 @@ var fs             = require('fs'),
     bodyParser     = require('body-parser'),
     methodOverride = require('method-override'),
     mongoose       = require('mongoose'),
+    ejs            = require('ejs'),
 
     // Routes
     routes = {
+        index: require(__dirname + '/app/routes/index'),
         regions: require(__dirname + '/app/routes/regions'),
         statistics: require(__dirname + '/app/routes/statistics')
     };
@@ -27,6 +29,9 @@ var getConfiguration,
 app = express();
 app.use(methodOverride());
 app.use(bodyParser());
+app.set('view engine', 'html');
+app.engine('html', ejs.renderFile);
+app.set('views', __dirname + '/app/views');
 
 /**
  * Load configuration from JSON
@@ -75,6 +80,8 @@ if (!_.isUndefined(config)) {
         mongoose.connect(config.database.connectionUri);
     }
 
+    app.use(express.static(__dirname + '/public'));
+    app.use('/', routes.index);
     app.use('/regions', routes.regions);
     app.use('/statistics', routes.statistics);
     app.listen(3000);
