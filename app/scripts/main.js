@@ -48,6 +48,8 @@ app.controller('StatisticCtrl', function ($scope, $http) {
 
   $scope.statistics          = [];
   $scope.isLoadingStatistics = false;
+  $scope.sortPredicate       = 'date'; // Sorting default: date
+  $scope.sortReverse         = true;   // Sorting direction default: descending
 
   loadStatistics = function () {
     var canProceed = ($scope.selectedSuburb && $scope.selectedKey),
@@ -111,6 +113,12 @@ app.controller('StatisticCtrl', function ($scope, $http) {
     }
 
     return '';
+  };
+
+  $scope.getSortClass = function (sortType) {
+    if ($scope.sortPredicate === sortType) {
+      return $scope.sortReverse ? 'is-sorted--reversed' : 'is-sorted';
+    }
   };
 
   $scope.$watch('selectedSuburb', loadStatistics);
