@@ -8,6 +8,7 @@ var gulp       = require('gulp'),
     imagemin   = require('gulp-imagemin'),
     jshint     = require('gulp-jshint'),
     ngAnnotate = require('gulp-ng-annotate'),
+    uglify     = require('gulp-uglify'),
     browserify = require('browserify'),
     source     = require('vinyl-source-stream');
 
@@ -54,6 +55,7 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source('afr.js'))
         .pipe(streamify(ngAnnotate()))
+        .pipe(streamify(uglify()))
         .pipe(gulp.dest('./public/assets/js'));
 });
 
