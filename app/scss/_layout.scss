@@ -40,7 +40,7 @@ nav {
 
 .chevron {
     display: inline-block;
-    margin-left: 5px;
+    margin-left: 5px; // Due to overlap of default chevron, push away LHS
 
     &::before {
         @include transform(rotate(135deg));
