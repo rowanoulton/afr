@@ -71,6 +71,25 @@ table {
 
     th {
         font-weight: bold;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .chevron {
+            display: none;
+        }
+
+        &.is-sorted .chevron {
+            @include transform(rotate(180deg));
+            margin-left: 15px;
+            margin-right: -10px;
+        }
+
+        &.is-sorted,
+        &.is-sorted--reversed {
+          .chevron { display: inline-block; }
+        }
     }
 
     td {
