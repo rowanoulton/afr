@@ -61,6 +61,8 @@ app.controller('StatisticCtrl', function ($scope, $http) {
           key:    $scope.selectedKey
         };
 
+        // Don't send statistic type if requesting volume, isn't supported and will return no results
+        // @todo Fix on API end
         if ($scope.selectedKey !== 'volume') {
           requestParams.type = $scope.selectedType;
         }
