@@ -8,7 +8,15 @@ AFR polls the [Trademe API](http://developer.trademe.co.nz/) for rental listings
 
 It is the goal of this project that eventually the collection of statistics not be tied to any specific API or data source, and that data might be provided by any means. Similarly, it would ideally not be limited to processing statistics on any single region or country.
 
-At present, it is dependant on the Trademe API as its data source, and limited to New Zealand.
+At present it is dependant on the Trademe API as its data source and limited to New Zealand.
+
+The vision of the public interface for the statistics collected is one that visualises the data, provides information about trends and plots them geographically. 
+
+To give a rough idea of one possible use, the point data could be plotted on a map and colour-coded based on percentiles:
+
+![A plot of prices per bedroom in Auckland's rental market (This is based on Trademe listings) as at July 15th, 2013. Red indicates higher percentile (more expensive) green less so](https://dl.dropboxusercontent.com/u/1432453/Github/AFR/auckland.jpg)
+
+![A plot of prices per bedroom in Wellington's rental market (This is based on Trademe listings) as at July 15th, 2013. Red indicates higher percentile (more expensive) green less so](https://dl.dropboxusercontent.com/u/1432453/Github/AFR/wellington.jpg)
 
 ## Statistics
 
