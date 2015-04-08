@@ -87,4 +87,4 @@ At least one region must be specified.
 
 To ensure that the script continues to run, it is recommended that the collection script be managed by [Forever](https://github.com/nodejitsu/forever) or similar.
 
-A frontend for the API will be added at a later date.
+A frontend for the API will be added at a later date. A provisional version is available [here](http://128.199.219.221:3000/).
