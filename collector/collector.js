@@ -182,9 +182,9 @@ syncJob = function () {
         }
 
         // Create the API interface instance
-        // Note: This must be recreated each time incase the token changes
+        // Note: This must be recreated each time incase the oauth details change
         api = new Trademe({
-            token: config.api.token
+            oauth: config.api.oauth
         });
 
         // Create and fetch each region specified in configuration

@@ -19,12 +19,17 @@ var ENDPOINT = 'https://api.trademe.co.nz/v1/',
  * @class Interface
  * @constructor
  * @param {Object} config
- *        @param {String} config.token Oauth token for requests to the API
+ *        @param {Object} config.oauth Oauth details for requests to the API
+ *            @param {String} config.oauth.consumerKey
+ *            @param {String} config.oauth.consumerSecret
  */
 function Interface (config) {
-    this.token    = config.token;
-    this.params   = {
-        oauth_token: this.token
+    this.oauth = config.oauth;
+
+    // Specify custom Oauth header which needs only consumer key & secret (not token)
+    // as per http://developer.trademe.co.nz/api-overview/authorisation/
+    this.headers = {
+        'Authorization': 'OAuth oauth_consumer_key="' + this.oauth.consumerKey + '", oauth_signature_method="PLAINTEXT", oauth_signature="' + this.oauth.consumerSecret + '&"'
     };
 };
 
@@ -41,13 +46,14 @@ Interface.prototype.getListings = function (config) {
         callback      = config.callback,
         // Extend using an empty object as the destination. This is to prevent this.params being modified.
         // Also force pagination to 500 rows as this is the max for authenticated requests
-        requestParams = _.extend({}, this.params, params, { rows: PAGESIZE });
+        requestParams = _.extend({}, params, { rows: PAGESIZE });
 
     console.log('📄  -> Loaded page ' + requestParams.page + ' of listings for region #' + requestParams.region);
 
     request.get({
         url: this.getUri(METHODS.listing),
         qs: requestParams,
+        headers: this.headers,
         json: true
     }, function (err, response, data) {
         if (err) throw err;
@@ -64,7 +70,7 @@ Interface.prototype.getListings = function (config) {
 Interface.prototype.getLocalities = function (callback) {
     request.get({
         url: this.getUri(METHODS.locale),
-        qs: this.params,
+        headers: this.headers,
         json: true
     }, function (err, response, data) {
         if (err) throw err;

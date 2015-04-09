@@ -1,6 +1,9 @@
 {
     "api": {
-        "token": "YOUR-TOKEN-HERE"
+        "oauth": {
+            "consumerKey": "your-consumer-key",
+            "consumerSecret": "your-consumer-secret"
+        }
     },
     "database": {
         "connectionUri": "your-connection-uri"
