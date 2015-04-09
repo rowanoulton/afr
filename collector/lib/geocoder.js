@@ -100,8 +100,8 @@ Geocoder.prototype.iterate = function (suburb) {
     };
 
     geocoder.geocode(address, function (err, response) {
-        if (err) {
-            if (!_.isNull(err.message.match(/ZERO_RESULTS/))) {
+        if (err || response.length === 0) {
+            if (response.length === 0 || !_.isNull(err.message.match(/ZERO_RESULTS/))) {
                 console.log('🌏  -> No results found', err);
 
                 // Instead of throwing the error, skip to the next
