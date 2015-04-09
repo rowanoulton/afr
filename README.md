@@ -4,6 +4,8 @@
 
 AFR polls the [Trademe API](http://developer.trademe.co.nz/) for rental listings each day and processes the results into a digest of statistics. It also provides an easy-to-use API endpoint for access to the data.
 
+A frontend for the API will be added at a later date. A provisional version is available [here](http://128.199.219.221:3000/).
+
 ## Goal
 
 It is the goal of this project that eventually the collection of statistics not be tied to any specific API or data source, and that data might be provided by any means. Similarly, it would ideally not be limited to processing statistics on any single region or country.
@@ -86,5 +88,3 @@ At least one region must be specified.
 ## Notes
 
 To ensure that the script continues to run, it is recommended that the collection script be managed by [Forever](https://github.com/nodejitsu/forever) or similar.
-
-A frontend for the API will be added at a later date. A provisional version is available [here](http://128.199.219.221:3000/).
